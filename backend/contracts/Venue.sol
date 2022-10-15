@@ -39,14 +39,14 @@ contract Venue {
     _requests.push(Request(msg.sender, numberOfPeople, start, end));
   }
 
-  function discoverRequest() public returns (Request memory) {
+  function discoverRequest() public onlyOwner returns (Request memory) {
     Request memory data = _requests[_requests.length - 1];
     _requests.pop();
     return data;
   }
 
-  function proposeOffer(address user, uint8 numberOfPeople, string memory start, string memory end, uint256 price) public onlyOwner {
-    _offers[user].push(Offer(numberOfPeople, start, end, price, false));
+  function proposeOffer(address user, Offer memory offer) public onlyOwner {
+    _offers[user].push(offer);
   }
 
   function checkOffers() public view returns (Offer[] memory) {
