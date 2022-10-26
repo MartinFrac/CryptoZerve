@@ -2,8 +2,9 @@
 
 pragma solidity ^0.8.17;
 
+import "./Venue.sol";
+
 contract System {
-  function getBooking(uint256) external view returns (uint256) {
-    return 5; 
-  }
+
+
 }

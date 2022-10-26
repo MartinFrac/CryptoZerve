@@ -2,9 +2,8 @@
 
 pragma solidity ^0.8.17;
 
-import "./BookingType.sol";
-
 contract Venue {
+  string private name;
   uint8 private year;
   address private owner;
   Request[] private _requests;
