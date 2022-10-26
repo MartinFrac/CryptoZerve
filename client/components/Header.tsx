@@ -1,6 +1,10 @@
 import React from 'react'
+import { useMMContext } from '../context/MetamaskContext';
 
 const Header = () => {
+  const mmContext = useMMContext();
+  const user = mmContext.account;
+
   return (
     <div className='bg-gray-300 flex justify-between items-center px-8 py-2'>
       <div className='flex flex-row gap-6 items-center'>
@@ -11,7 +15,10 @@ const Header = () => {
         <span>Vote</span>
         <span>List your venue</span>
         <span>Register</span>
-        <span>Login</span>
+        {
+          mmContext.account ? <span>{user}</span> : 
+          <button onClick={mmContext.connect}>Login</button>
+        }
       </div>
     </div>
   )
