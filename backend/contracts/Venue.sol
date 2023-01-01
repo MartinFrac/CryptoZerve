@@ -8,7 +8,6 @@ contract Venue {
   address private owner;
   Request[] private _requests;
   mapping(address => Offer[]) private _offers;
-  mapping(uint8 => Offer[]) private _confirmed;
 
   struct Request {
     address user;
@@ -52,12 +51,7 @@ contract Venue {
     return _offers[msg.sender];
   }
 
-  function acceptOffer(uint8 id, uint8 dayOfTheYear) public {
+  function acceptOffer(uint8 id) public {
     _offers[msg.sender][id].isConfirmed = true;
-    _confirmed[dayOfTheYear].push(_offers[msg.sender][id]);
-  }
-
-  function getConfirmed(uint8 dayOfTheYear) public view returns(Offer[] memory) {
-    return _confirmed[dayOfTheYear];
   }
 }
