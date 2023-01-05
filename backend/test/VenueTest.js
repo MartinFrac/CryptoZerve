@@ -45,9 +45,16 @@ contract("Venue", (accounts) => {
 
   it("Accept offer should send money to the contract", async() => {
     const venue = await Venue.deployed();
-    const balanceBefore = await web3.eth.getBalance(accounts[1]);
+    const balanceBefore = toBN(await web3.eth.getBalance(accounts[1]));
+    const venueBalanceBefore = toBN(await web3.eth.getBalance(venue.address));
+
     const data = await venue.acceptOffer(0, {from: accounts[1], value: price});
-    const balanceAfter = await web3.eth.getBalance(accounts[1]);
-    assert(balanceBefore !== balanceAfter, "Should not match");
+
+    const balanceAfter = toBN(await web3.eth.getBalance(accounts[1]));
+    const venueBalanceAfter = toBN(await web3.eth.getBalance(venue.address));
+    const gasUsed = toBN(data.receipt.gasUsed);
+    const gasPrice = toBN(data.receipt.effectiveGasPrice);
+    assert.equal(balanceBefore.toString(), balanceAfter.add(toBN(price).add(gasUsed.mul(gasPrice))).toString());
+    assert.equal(venueBalanceAfter.toString(), venueBalanceBefore.add(toBN(price)).toString());
   })
 })
