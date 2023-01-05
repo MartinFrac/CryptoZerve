@@ -9,6 +9,8 @@ contract Venue {
   Request[] private _requests;
   mapping(address => Offer[]) private _offers;
 
+  event Received(address, uint);
+
   struct Request {
     address user;
     uint8 numberOfPeople;
@@ -51,7 +53,9 @@ contract Venue {
     return _offers[msg.sender];
   }
 
-  function acceptOffer(uint8 id) public {
+  function acceptOffer(uint8 id) external payable {
+    Offer memory offer = _offers[msg.sender][id];
+    require(msg.value == offer.price, "wrong amount");
     _offers[msg.sender][id].isConfirmed = true;
   }
 }
