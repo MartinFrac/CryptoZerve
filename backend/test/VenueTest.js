@@ -1,3 +1,5 @@
+var should = require('chai').should();
+
 const Venue = artifacts.require("Venue");
 const { toBN } = web3.utils;
 
@@ -14,9 +16,11 @@ contract("Venue", (accounts) => {
       price: price,
       isConfirmed: false,
     }
-    await venue.proposeOffer(user, offer);
+    const tx = await venue.proposeOffer(user, offer);
     const offers = await venue.checkOffers({from: user});
     assert.equal(offers[0].price, price);
+    assert.equal(tx.logs[0].event, "NewOffer");
+    assert.equal(tx.logs[0].args[0], user);
   });
 
   it("accept offer should not take money if its wrong amount", async() => {
@@ -54,6 +58,8 @@ contract("Venue", (accounts) => {
     const venueBalanceAfter = toBN(await web3.eth.getBalance(venue.address));
     const gasUsed = toBN(data.receipt.gasUsed);
     const gasPrice = toBN(data.receipt.effectiveGasPrice);
+    assert.equal(data.logs[0].event, "OfferAccepted");
+    assert.equal(data.logs[0].args[0], accounts[1]);
     assert.equal(balanceBefore.toString(), balanceAfter.add(toBN(price).add(gasUsed.mul(gasPrice))).toString());
     assert.equal(venueBalanceAfter.toString(), venueBalanceBefore.add(toBN(price)).toString());
   })
