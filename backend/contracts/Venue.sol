@@ -9,7 +9,9 @@ contract Venue {
   Request[] private _requests;
   mapping(address => Offer[]) private _offers;
 
-  event Received(address, uint);
+  event NewRequest(address);
+  event NewOffer(address);
+  event OfferAccepted(address);
 
   struct Request {
     address user;
@@ -37,6 +39,7 @@ contract Venue {
 
   function request(uint8 numberOfPeople, string memory start, string memory end) public {
     _requests.push(Request(msg.sender, numberOfPeople, start, end));
+    emit NewRequest(msg.sender);
   }
 
   function discoverRequest() public onlyOwner returns (Request memory) {
@@ -47,6 +50,7 @@ contract Venue {
 
   function proposeOffer(address user, Offer memory offer) public onlyOwner {
     _offers[user].push(offer);
+    emit NewOffer(user);
   }
 
   function checkOffers() public view returns (Offer[] memory) {
@@ -57,5 +61,6 @@ contract Venue {
     Offer memory offer = _offers[msg.sender][id];
     require(msg.value == offer.price, "wrong amount");
     _offers[msg.sender][id].isConfirmed = true;
+    emit OfferAccepted(msg.sender);
   }
 }
