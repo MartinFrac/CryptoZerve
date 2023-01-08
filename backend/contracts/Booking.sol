@@ -51,10 +51,14 @@ contract Booking {
   event Booked();
   event AttendanceConfirmed();
 
-  constructor() payable {
+  constructor(string memory name_, string memory start_, string memory end_, string memory location_) payable {
     seller = payable(msg.sender);
     priceInWei = msg.value;
     state = State.Created;
+    name = name_;
+    start = start_;
+    end = end_;
+    location = location_;
   }
 
   function abort() external onlySeller inState(State.Created) {

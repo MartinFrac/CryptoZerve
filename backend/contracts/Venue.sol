@@ -4,7 +4,6 @@ pragma solidity ^0.8.17;
 
 contract Venue {
   string private name;
-  uint8 private year;
   address private owner;
   Request[] private _requests;
   mapping(address => Offer[]) private _offers;
@@ -33,8 +32,9 @@ contract Venue {
     _;
   }
 
-  constructor() {
+  constructor(string memory name_) {
     owner = msg.sender;
+    name = name_;
   }
 
   function request(uint8 numberOfPeople, string memory start, string memory end) public {
