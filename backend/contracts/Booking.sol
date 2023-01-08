@@ -43,7 +43,7 @@ contract Booking {
   }
 
   modifier condition(bool condition_) {
-    require(condition_);
+    require(condition_, "condition not met");
     _;
   }
 
