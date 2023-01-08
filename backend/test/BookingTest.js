@@ -3,7 +3,7 @@ const { toBN } = web3.utils;
 
 contract("Booking", function (accounts) {
   let booking;
-  const valueSent = 10 * 10 ** 18;
+  const valueSent = toBN(10 * 10 ** 18);
   const name = "Booking1";
   const start = "2022-02-02";
   const end = "2022-02-05";
@@ -11,6 +11,7 @@ contract("Booking", function (accounts) {
 
   beforeEach("Contract setup for testing", async () => {
     booking = await Booking.new(name, start, end, location, {value: valueSent});
+    console.log("Value sent: " + valueSent);
   })
 
   it("Should create contract with 10 ether", async () => {
@@ -31,7 +32,7 @@ contract("Booking", function (accounts) {
 
   it("When book with invalid value should revert", async () => {
     const bookRef = "123";
-    const invalidValue = 100;
+    const invalidValue = valueSent.add(toBN(10));
     const balanceBefore = toBN(await web3.eth.getBalance(accounts[1]));
     try {
       await booking.book(bookRef, {value: invalidValue, from: accounts[1]});
