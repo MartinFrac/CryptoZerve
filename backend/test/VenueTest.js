@@ -25,16 +25,17 @@ contract("Venue", (accounts) => {
 
   it("accept offer should not take money if its wrong amount", async() => {
     const venue = await Venue.deployed();
-    const wrongPrice = 10;
+    const wrongPrice = 1000;
     const balanceBefore = await web3.eth.getBalance(accounts[1]);
     
     try {
       await venue.acceptOffer(0, {from: accounts[1], value: wrongPrice});
     } catch(err) {
-      const balanceAfter = await web3.eth.getBalance(accounts[1]);
       assert(err, "should throw an error");
-      assert.equal(balanceBefore, balanceAfter);
+      assert(err.data.reason, "wrong amount");
     } 
+    const balanceAfter = await web3.eth.getBalance(accounts[1]);
+    assert.equal(balanceBefore, balanceAfter);
   })
 
   it("Check if only gas is used", async() => {
