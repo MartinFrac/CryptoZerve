@@ -24,10 +24,12 @@ contract("Booking", function (accounts) {
     const _start = await booking.start();
     const _end = await booking.end();
     const _location = await booking.location();
+    const _priceInWei = await booking.priceInWei();
     assert.equal(name, _name);
     assert.equal(start, _start);
     assert.equal(end, _end);
     assert.equal(location, _location);
+    assert.equal(valueSent.toString(), _priceInWei.toString());
   })
 
   it("When book with invalid value should revert", async () => {
