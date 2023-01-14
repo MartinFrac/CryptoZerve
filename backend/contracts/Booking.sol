@@ -61,6 +61,10 @@ contract Booking {
     location = location_;
   }
 
+  function changeOwner(address newSeller) external onlySeller inState(State.Created) {
+    seller = payable(newSeller);
+  }
+
   function abort() external onlySeller inState(State.Created) {
     emit Aborted();
     state = State.Inactive;

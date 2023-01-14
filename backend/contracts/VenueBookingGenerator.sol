@@ -25,6 +25,7 @@ contract VenueBookingGenerator {
 
   function createBooking(string memory name_, string memory start, string memory end, string memory location_) payable external onlyOwner returns(uint256) {
     Booking bookingContract = new Booking{value:msg.value}(name_, start, end, location_);
+    bookingContract.changeOwner(msg.sender);
     bookings[counter] = bookingContract;
     counter++;
     return counter-1;
