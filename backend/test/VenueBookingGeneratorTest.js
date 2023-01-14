@@ -18,8 +18,9 @@ contract("VenueBookingGenerator", function(accounts) {
     const start = "start";
     const end = "end";
     const location = "location";
-    const createCall = await vbn.createBooking.call(name, start, end, location, {value: valueSent});
-    const tx = await vbn.createBooking(name, start, end, location, {value: valueSent});
+    const seller = accounts[0];
+    const createCall = await vbn.createBooking.call(name, start, end, location, {from: accounts[0], value: valueSent});
+    const tx = await vbn.createBooking(name, start, end, location, {from: accounts[0], value: valueSent});
     const bookingAddress = await vbn.getBooking.call(createCall);
     const bookingInstance = await Booking.at(bookingAddress);
     const bookingPrice = await bookingInstance.priceInWei();
@@ -27,10 +28,12 @@ contract("VenueBookingGenerator", function(accounts) {
     const _start = await bookingInstance.start();
     const _end = await bookingInstance.end();
     const _location = await bookingInstance.location();
+    const _seller = await bookingInstance.seller();
     assert.equal(valueSent.toString(), bookingPrice.toString());
     assert.equal(name, _name);
     assert.equal(start, _start);
     assert.equal(end, _end);
     assert.equal(location, _location);
+    assert.equal(seller, _seller);
   })
 })
