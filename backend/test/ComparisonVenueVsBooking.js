@@ -6,7 +6,7 @@ const { toBN } = web3.utils;
 describe("VenueVsBooking", () => {
   let vbg, venue, accounts;
   beforeEach("Contract setup for testing", async () => {
-    venue = await Venue.new("venue");
+    venue = await Venue.new("venue", "location");
     vbg = await VenueBookingGenerator.new("vbg", "location");
     accounts = await web3.eth.getAccounts();
   });

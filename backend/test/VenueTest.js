@@ -1,5 +1,3 @@
-var should = require('chai').should();
-
 const Venue = artifacts.require("Venue");
 const { toBN } = web3.utils;
 

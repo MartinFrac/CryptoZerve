@@ -23,11 +23,14 @@ contract VenueBookingGenerator {
     counter = 0;
   }
 
+  function changeOwner(address newOwner) external onlyOwner {
+    owner = payable(newOwner);
+  }
+
   function createBooking(string memory name_, string memory start, string memory end, string memory location_) payable external onlyOwner returns(uint256) {
     Booking bookingContract = new Booking{value:msg.value}(name_, start, end, location_);
     bookingContract.changeOwner(msg.sender);
-    bookings[counter] = bookingContract;
-    counter++;
+    bookings[counter++] = bookingContract;
     return counter-1;
   }
 

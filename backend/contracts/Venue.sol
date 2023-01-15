@@ -4,6 +4,7 @@ pragma solidity ^0.8.17;
 
 contract Venue {
   string public name;
+  string public location;
   address public owner;
   Request[] private _requests;
   mapping(address => Offer[]) private _offers;
@@ -32,9 +33,10 @@ contract Venue {
     _;
   }
 
-  constructor(string memory name_) {
+  constructor(string memory name_, string memory location_) {
     owner = msg.sender;
     name = name_;
+    location = location_;
   }
 
   function changeOwner(address newOwner) external onlyOwner {

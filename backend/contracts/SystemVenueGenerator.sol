@@ -2,10 +2,10 @@
 
 pragma solidity ^0.8.17;
 
-import "./Venue.sol";
+import "./VenueBookingGenerator.sol";
 
-contract SystemVenue {
-  mapping(uint256 => Venue) private venues;
+contract SystemVenueGenerator {
+  mapping(uint256 => VenueBookingGenerator) private venues;
   uint256 private counter;
 
   constructor() {
@@ -13,13 +13,13 @@ contract SystemVenue {
   }
 
   function createVenue(string memory name, string memory location) external returns(uint256) {
-    Venue venueContract = new Venue(name, location);
+    VenueBookingGenerator venueContract = new VenueBookingGenerator(name, location);
     venueContract.changeOwner(msg.sender);
     venues[counter] = venueContract;
     return counter++;
   }
 
-  function getVenue(uint256 id) external view returns(Venue) {
+  function getVenue(uint256 id) external view returns(VenueBookingGenerator) {
     return venues[id];
-  }
+  } 
 }
