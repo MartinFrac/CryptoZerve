@@ -16,17 +16,25 @@ describe("SystemVenueGenerator", () => {
   })
 
   it("Should create a venue with correct parameters", async () => {
-    const name = "venue name";
-    const location = "venue location";
+    await checkParams("name", "location", accounts[0], 0);
+  })
+
+  const checkParams = async (name, location, owner, counter) => {
     const callNewVenue = await svg.createVenue.call(name, location);
-    const txNewVenue = await svg.createVenue(name, location, {from: accounts[0]});
-    const addressVenue = await svg.getVenue.call(0);
+    const txNewVenue = await svg.createVenue(name, location, {from: owner});
+    const addressVenue = await svg.getVenue.call(counter);
     const instanceVenue = await VenueBookingGenerator.at(addressVenue);
     const _name = await instanceVenue.name.call();
     const _location = await instanceVenue.location.call();
-    const owner = await instanceVenue.owner.call();
+    const _owner = await instanceVenue.owner.call();
     assert.equal(name, _name);
     assert.equal(location, _location);
-    assert.equal(accounts[0], owner);
+    assert.equal(owner, _owner);
+  }
+
+  it("Should create multiple venues", async () => {
+    await checkParams("name1", "location1", accounts[0], 0);
+    await checkParams("name2", "location2", accounts[1], 1);
+    await checkParams("name3", "location3", accounts[2], 2);
   })
 })
