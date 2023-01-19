@@ -14,25 +14,36 @@ contract VenueSlots {
   uint16 public startDayYear;
   address payable public owner;
   mapping(address => Booking) private _bookings;
-  //for now 6 months, 180 days
-  uint256 private _slotsDays;
-  //48 slots per day (every half an hour)
-  mapping(uint8 => uint64) private _daySlotToHalfHour;
+  //for now 6 months, 180 days - what days were made available to book
+  uint16 private _afterExpire;
+  uint256 private _slotsDaysRule;
+  //what hours in the day are available
+  uint64 private _slotsHalfHourRule;
+  //how many units are available per slot
+  uint64 private _nOSlotsPerHalfHour;
+  //day and half hour slot to number of units available (counter of units available). i.e. 24/30. Schema: day + slot = 3 + 24 (third day, 24th slot)
+  mapping(uint256 => uint64) private _halfHourSlotToUnits;
 
-  constructor(string memory _name, string memory _location, uint16 _startDayOfTheContract, uint16 _startDayYear) {
+  constructor(string memory _name, string memory _location, uint16 _startDayOfTheContract, uint16 _startDayYear, uint256 slotsDaysRule, uint64 slotsHalfHourRule, uint64 nOSlotsPerHalfHour) {
     name = _name;
     location = _location;
     startDayOfTheContract = _startDayOfTheContract;
     startDayYear = _startDayYear;
     owner = payable(msg.sender);
+    _slotsDaysRule = slotsDaysRule;
+    _slotsHalfHourRule = slotsHalfHourRule;
+    _nOSlotsPerHalfHour = nOSlotsPerHalfHour;
+    _afterExpire = 180;
   }
 
   struct Booking {
     uint256 daySlot;
     uint64 startHalfHourSlot;
     uint64 endHalfHourSlot;
-    uint8 nOPeople;
+    uint8 units;
   }
+
+  event Test(uint256 test);
 
   modifier onlyOwner() {
     require(msg.sender == owner, "only owner");
@@ -43,13 +54,34 @@ contract VenueSlots {
     owner = payable(newOwner);
   }
 
-  function book() external payable {
-
-    // require(state1 == state2, "wrong state");
+  function book(uint16 day, uint8 startSlot, uint8 endSlot, uint8 units) external payable {
+    //require empty slot
+    checkRules(day, startSlot, endSlot, units);
   }
 
   function confirmAttendance(string memory ref) external onlyOwner {
 
     // require(keccak256(abi.encodePacked(ref1)) == keccak256(abi.encodePacked(ref2)), "wrong ref");
+  }
+
+  function checkRules(uint16 day, uint8 startSlot, uint8 endSlot, uint8 units) view private returns(bool) {
+    //check day against contract expiration
+    require(day < (startDayOfTheContract + _afterExpire) && day > startDayOfTheContract, "booking day is not within contract constraints");
+    //check day against day rule bit
+    uint256 isDayMatched = _slotsDaysRule & (1 << (day - 1));
+    require(isDayMatched > 0, "Day needs to be available for the venue");
+    //check if start slot and end slot cover bits in half hour slots for each person
+    uint8 slotsCount = endSlot - startSlot + 1;
+    for (uint8 i = 0; i < slotsCount; i++) {
+      uint256 dayPlusHalfHourMapSlot = convertToDayPlusHalfHourMap(day, startSlot + i);
+      uint64 unitsPerSlot = _halfHourSlotToUnits[dayPlusHalfHourMapSlot];
+      require(_nOSlotsPerHalfHour - unitsPerSlot >= units, "not enough room for the units");
+    }
+    //check day against half hour rule bit
+    return true;
+  }
+
+  function convertToDayPlusHalfHourMap(uint16 day, uint8 halfHourSlot) pure private returns(uint256) {
+    return (day * 100) + halfHourSlot;
   }
 }

@@ -36,11 +36,13 @@ contract("Booking", function (accounts) {
     const bookRef = "123";
     const invalidValue = valueSent.add(toBN(10));
     const balanceBefore = toBN(await web3.eth.getBalance(accounts[1]));
+    let error;
     try {
       await booking.book(bookRef, {value: invalidValue, from: accounts[1]});
     } catch (err) {
-      assert(err, "Should throw an error");
+      error = err;
     }
+    assert(error, "Should throw an error");
     const balanceAfter = toBN(await web3.eth.getBalance(accounts[1]));
     assert.equal(balanceBefore.toString(), balanceAfter.toString());
   })
