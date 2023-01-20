@@ -66,18 +66,22 @@ contract VenueSlots {
 
   function checkRules(uint16 day, uint8 startSlot, uint8 endSlot, uint8 units) view private returns(bool) {
     //check day against contract expiration
-    require(day < (startDayOfTheContract + _afterExpire) && day > startDayOfTheContract, "booking day is not within contract constraints");
+    require(day < (startDayOfTheContract + _afterExpire) && day >= startDayOfTheContract, "booking day is not within contract constraints");
     //check day against day rule bit
     uint256 isDayMatched = _slotsDaysRule & (1 << (day - 1));
     require(isDayMatched > 0, "Day needs to be available for the venue");
-    //check if start slot and end slot cover bits in half hour slots for each person
     uint8 slotsCount = endSlot - startSlot + 1;
+    //check half hour slots against half hour rule bit
+    uint64 slotsBitmap = (uint64(2) ** slotsCount) - 1;
+    slotsBitmap = slotsBitmap * uint64(2) ** (startSlot - 1);
+    uint64 slotsResult = slotsBitmap & _slotsHalfHourRule;
+    require(slotsResult == slotsBitmap, "Slots needs to be available for the venue");
+    //check if start slot and end slot cover bits in half hour slots for each person
     for (uint8 i = 0; i < slotsCount; i++) {
       uint256 dayPlusHalfHourMapSlot = convertToDayPlusHalfHourMap(day, startSlot + i);
       uint64 unitsPerSlot = _halfHourSlotToUnits[dayPlusHalfHourMapSlot];
       require(_nOSlotsPerHalfHour - unitsPerSlot >= units, "not enough room for the units");
     }
-    //check day against half hour rule bit
     return true;
   }
 
