@@ -8,8 +8,8 @@ contract("VenueSlots", (accounts) => {
     location: "location",
     dayOfTheYear: 1,
     year: 2023,
-    daysRule: 10, //1010
-    slotsRule: 100, //0111;
+    daysRule: 0b1010,
+    slotsRule: 0b0111,
     noSlots: 30,
   }
 
@@ -67,7 +67,7 @@ contract("VenueSlots", (accounts) => {
   });
 
   it("Should throw when day is not available", async () => {
-    await setup({dayOfTheYear: 1, daysRule: 10}); //daysRule: 1010
+    await setup({dayOfTheYear: 1, daysRule: 0b1010});
     let error;
     try {
       await venue.book(1, 1, 1, 1);
@@ -90,8 +90,43 @@ contract("VenueSlots", (accounts) => {
     assert.equal("not enough room for the units", error.data.reason);
   })
 
-  it("Should throw an error when half hour slots are not available", async () => {
+  const testArraySlotsUnavailable = [[1,3], [2, 4], [3,3], [9,9]];
+  testArraySlotsUnavailable.forEach(async (slots) => {
+    it(`Args: ${slots}| Should throw an error when half hour slots are not available`, async () => {
+      await setup({slotsRule: 0b11000011}) 
+      let error;
+      try {
+        await venue.book(2, slots[0], slots[1], 1);
+      } catch (err) {
+        error = err;
+      }
+      assert(error, "should throw an error");
+      assert.equal("Slots needs to be available for the venue", error.data.reason);
+    })
+  })
+  
+  const testArraySlotsAvailable = [[1,1], [4,6], [8,9]];
+  testArraySlotsAvailable.forEach(async (slots) => {
+    it(`Args: ${slots}| Should book when slots available`, async () => {
+      await setup({slotsRule: 0b110111001})
+      await venue.book(2, slots[0], slots[1], 1);
+    })
+  })
 
+  it("Should change state of contract when booked", async () => {
+    await setup();
+    const daySlot = 2;
+    const startSlot = 1;
+    const endSlot = 1;
+    const units = 1;
+    await venue.book(daySlot, startSlot, endSlot, units);
+    const bookings = await venue.getBookings();
+    const unitsLeft = await venue.getNOFreeSlotUnits(daySlot, startSlot);
+    assert.equal(daySlot, bookings[0].daySlot);
+    assert.equal(startSlot, bookings[0].startHalfHourSlot);
+    assert.equal(endSlot, bookings[0].endHalfHourSlot);
+    assert.equal(units, bookings[0].units);
+    assert.equal(instance.noSlots - units, unitsLeft.toString());
   })
 
   it("Should let book when meets all the rules", async () => {
