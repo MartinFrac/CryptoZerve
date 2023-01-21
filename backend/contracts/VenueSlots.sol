@@ -41,10 +41,12 @@ contract VenueSlots {
   }
 
   function getBooking(uint8 day, uint16 addressEnd, uint16 pin) external view onlyOwner returns(Booking memory) {
-    return _refToBooking[convertToRef(day, addressEnd, pin)];
+    Booking memory booking = _refToBooking[convertToRef(day, addressEnd, pin)];
+    require(booking.daySlot != 0, "wrong ref");
+    return booking;
   }
 
-  constructor(string memory _name, string memory _location, uint16 _startDayOfTheContract, uint16 _startDayYear, uint256 slotsDaysRule, uint64 slotsHalfHourRule, uint64 nOSlotsPerHalfHour, uint256 _price) {
+  constructor(string memory _name, string memory _location, uint16 _startDayOfTheContract, uint16 _startDayYear, uint256 slotsDaysRule, uint64 slotsHalfHourRule, uint64 nOSlotsPerHalfHour, uint256 _price) payable {
     name = _name;
     location = _location;
     require(_startDayOfTheContract > 0 && _startDayOfTheContract <= 366, "Start day needs to be within a year cycle");
@@ -56,6 +58,7 @@ contract VenueSlots {
     _nOSlotsPerHalfHour = nOSlotsPerHalfHour;
     price = _price;
     _afterExpire = 180;
+    //TODO: topup
   }
 
   struct Booking {
@@ -81,25 +84,26 @@ contract VenueSlots {
     owner = payable(newOwner);
   }
 
-  function confirmAttendance(string memory ref) external onlyOwner {
+  function confirmAttendance(uint8 day, uint16 addressEnd, uint16 pin) external onlyOwner {
+    uint32 ref = convertToRef(day, addressEnd, pin); 
+    Booking memory booking = _refToBooking[ref];
+    require(booking.daySlot != 0, "wrong ref");
+    //TODO: pay price + owner's deposit to owner
+  }
 
-    // require(keccak256(abi.encodePacked(ref1)) == keccak256(abi.encodePacked(ref2)), "wrong ref");
+  function topUp() external onlyOwner payable {
+    //TODO: topup
   }
   
   //=====PUBLIC=====
+
   function book(uint8 day, uint8 startSlot, uint8 endSlot, uint8 units) external payable returns(uint16) {
-    //require empty slot
     checkRules(day, startSlot, endSlot, units);
     uint256 _price = (endSlot - startSlot + 1) * units * price;
     uint32 ref = createRef(day); 
-    //book
-    Booking memory booking = Booking(day, startSlot, endSlot, units, _price, ref);
-    _bookings[msg.sender].push(booking);
-    _refToBooking[ref] = booking;
-    // _addressToBookingsMapByRef[msg.sender][ref] = booking;
-    for (uint8 i = 0; i < endSlot - startSlot + 1; i++) {
-      _halfHourSlotToUnits[convertToDayPlusHalfHourMap(day, startSlot + i)] += units;
-    }
+    createBooking(day, startSlot, endSlot, units, _price, ref);
+    fillSlots(endSlot - startSlot + 1, day, startSlot, units);
+    //TODO: pay
     return uint16(ref);
   }
 
@@ -175,5 +179,17 @@ contract VenueSlots {
     ref += addressEnd * 2 ** 16;
     ref += pin;
     return ref;
+  }
+
+  function fillSlots(uint64 numberOfSlots, uint8 day, uint8 startSlot, uint8 units) private {
+    for (uint8 i = 0; i < numberOfSlots; i++) {
+      _halfHourSlotToUnits[convertToDayPlusHalfHourMap(day, startSlot + i)] += units;
+    }
+  }
+
+  function createBooking(uint8 day, uint8 startSlot, uint8 endSlot, uint8 units, uint256 _price, uint32 ref) private {
+    Booking memory booking = Booking(day, startSlot, endSlot, units, _price, ref);
+    _bookings[msg.sender].push(booking);
+    _refToBooking[ref] = booking;
   }
 }

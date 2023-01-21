@@ -131,14 +131,18 @@ contract("VenueSlots", (accounts) => {
     assert.equal(instance.noSlots - units, unitsLeft.toString());
   })
 
-  it("test", async () => {
+  it("Should create correct reference when booked", async () => {
     await setup();
-    const pin = await venue.book.call(2,1,1,1);
-    const refTx = await venue.book(2,1,1,1);
-    const booking = await venue.getBooking.call(2, 0xC1, pin);
-    const bookingRef = toBN(booking.ref);
-    console.log(bookingRef.toString(2));
-    console.log(pin.toString(2));
+    const day = 2;
+    const ref = await venue.book.call(day,1,1,1);
+    const bookTx = await venue.book(day,1,1,1);
+    const bookings = await venue.getBookings();
+    const booking = await venue.getBooking.call(day, 0xC1, ref);
+    assert.equal(bookings[0].ref, booking.ref);
+  })
+
+  it("test", async () => {
+
   })
 
   it("Should let book when meets all the rules", async () => {
