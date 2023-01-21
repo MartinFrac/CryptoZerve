@@ -13,8 +13,9 @@ contract VenueSlots {
   //what year i.e. 2025
   uint16 public startDayYear;
   address payable public owner;
+  uint256 public price;
 
-  mapping(address => mapping(uint16 => Booking)) private _addressToBookingsMapByRef;
+  mapping(uint32 => Booking) private _refToBooking;
   mapping(address => Booking[]) private _bookings;
   //for now 6 months, 180 days - what days were made available to book
   uint16 private _afterExpire;
@@ -26,11 +27,24 @@ contract VenueSlots {
   //day and half hour slot to number of units available (counter of units available). i.e. 24/30. Schema: day + slot = 3 + 24 (third day, 24th slot)
   mapping(uint256 => uint64) private _halfHourSlotToUnits;
 
+  //=====GETTERS=====
   function getNOFreeSlotUnits(uint16 day, uint8 slot) external view returns(uint64) {
     return _nOSlotsPerHalfHour - _halfHourSlotToUnits[convertToDayPlusHalfHourMap(day, slot)];
   }
 
-  constructor(string memory _name, string memory _location, uint16 _startDayOfTheContract, uint16 _startDayYear, uint256 slotsDaysRule, uint64 slotsHalfHourRule, uint64 nOSlotsPerHalfHour) {
+  function getBookings(address user) external view onlyOwner returns(Booking[] memory) {
+    return _bookings[user];
+  }
+
+  function getBookings() external view returns(Booking[] memory) {
+    return _bookings[msg.sender];
+  }
+
+  function getBooking(uint8 day, uint16 addressEnd, uint16 pin) external view onlyOwner returns(Booking memory) {
+    return _refToBooking[convertToRef(day, addressEnd, pin)];
+  }
+
+  constructor(string memory _name, string memory _location, uint16 _startDayOfTheContract, uint16 _startDayYear, uint256 slotsDaysRule, uint64 slotsHalfHourRule, uint64 nOSlotsPerHalfHour, uint256 _price) {
     name = _name;
     location = _location;
     require(_startDayOfTheContract > 0 && _startDayOfTheContract <= 366, "Start day needs to be within a year cycle");
@@ -40,6 +54,7 @@ contract VenueSlots {
     _slotsDaysRule = slotsDaysRule;
     _slotsHalfHourRule = slotsHalfHourRule;
     _nOSlotsPerHalfHour = nOSlotsPerHalfHour;
+    price = _price;
     _afterExpire = 180;
   }
 
@@ -48,56 +63,79 @@ contract VenueSlots {
     uint64 startHalfHourSlot;
     uint64 endHalfHourSlot;
     uint8 units;
+    uint256 price;
+    uint32 ref;
   }
 
+  //=====EVENTS=====
   event Test(uint256 test);
 
+  //=====MODIFIERS=====
   modifier onlyOwner() {
     require(msg.sender == owner, "only owner");
     _;
   }
 
+  //=====ONLY OWNER=====
   function changeOwner(address newOwner) external onlyOwner {
     owner = payable(newOwner);
-  }
-
-  function book(uint16 day, uint8 startSlot, uint8 endSlot, uint8 units) external payable returns(uint16) {
-    //require empty slot
-    checkRules(day, startSlot, endSlot, units);
-    uint16 ref = createRef(); 
-    //book
-    Booking memory booking = Booking(day, startSlot, endSlot, units);
-    _bookings[msg.sender].push(booking);
-    _addressToBookingsMapByRef[msg.sender][ref] = booking;
-    // _addressToBookingsMapByRef[msg.sender][ref] = booking;
-    for (uint8 i = 0; i < endSlot - startSlot + 1; i++) {
-      _halfHourSlotToUnits[convertToDayPlusHalfHourMap(day, startSlot + i)] += units;
-    }
-    return ref;
-  }
-
-  function createRef() private view returns(uint16) {
-    uint16 random;
-    bool isUnique = false;
-      random = uint16(block.timestamp % 10_000);
-      Booking memory oldBooking = _addressToBookingsMapByRef[msg.sender][random];
-      if (oldBooking.daySlot == 0) {
-        isUnique = true;
-      }
-    return random;
   }
 
   function confirmAttendance(string memory ref) external onlyOwner {
 
     // require(keccak256(abi.encodePacked(ref1)) == keccak256(abi.encodePacked(ref2)), "wrong ref");
   }
-
-  function getBookings(address user) external view onlyOwner returns(Booking[] memory) {
-    return _bookings[user];
+  
+  //=====PUBLIC=====
+  function book(uint8 day, uint8 startSlot, uint8 endSlot, uint8 units) external payable returns(uint16) {
+    //require empty slot
+    checkRules(day, startSlot, endSlot, units);
+    uint256 _price = (endSlot - startSlot + 1) * units * price;
+    uint32 ref = createRef(day); 
+    //book
+    Booking memory booking = Booking(day, startSlot, endSlot, units, _price, ref);
+    _bookings[msg.sender].push(booking);
+    _refToBooking[ref] = booking;
+    // _addressToBookingsMapByRef[msg.sender][ref] = booking;
+    for (uint8 i = 0; i < endSlot - startSlot + 1; i++) {
+      _halfHourSlotToUnits[convertToDayPlusHalfHourMap(day, startSlot + i)] += units;
+    }
+    return uint16(ref);
   }
 
-  function getBookings() external view returns(Booking[] memory) {
-    return _bookings[msg.sender];
+  //=====PRIVATE=====
+
+  //ref = date + address(2) + random
+  //123 1f 0547
+  //[8], [8], [16]
+  //within a day there is 15**2 * 10_000 permutations = 2_250_000 different references available
+  function createRef(uint8 day) private view returns(uint32) {
+    //encode day
+    uint32 ref = day * 2 ** 24;
+    //encode address last 2 chars
+    uint8 last2 = getLast2(msg.sender);
+    ref += last2 * 2 ** 16;
+    //encode random number
+    ref = createRandom(ref);
+    return ref;
+  }
+
+  function createRandom(uint32 ref) private view returns(uint32) {
+    uint32 random;
+    bool isUnique = false;
+    random = uint32(block.timestamp % 10_000);
+    while (!isUnique) {
+      if (random == 9999) {
+        random = 0;
+      }
+      random += 1;
+      ref += random;
+      Booking memory oldBooking = _refToBooking[ref];
+      if (oldBooking.daySlot == 0) {
+        isUnique = true;
+      }
+    }
+    return ref;
   }
 
   function checkRules(uint16 day, uint8 startSlot, uint8 endSlot, uint8 units) view private returns(bool) {
@@ -121,7 +159,21 @@ contract VenueSlots {
     return true;
   }
 
+  function getLast2(address user) private pure returns(uint8) {
+    bytes memory b = abi.encodePacked(user);
+    bytes1 lastByte = b[19];
+    uint8 convert = uint8(lastByte);
+    return convert;
+  }
+
   function convertToDayPlusHalfHourMap(uint16 day, uint8 halfHourSlot) pure private returns(uint256) {
     return (day * 100) + halfHourSlot;
+  }
+
+  function convertToRef(uint8 day, uint16 addressEnd, uint16 pin) private pure returns(uint32) {
+    uint32 ref = day * 2 ** 24;
+    ref += addressEnd * 2 ** 16;
+    ref += pin;
+    return ref;
   }
 }

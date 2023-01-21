@@ -11,9 +11,10 @@ contract("VenueSlots", (accounts) => {
     daysRule: 0b1010,
     slotsRule: 0b0111,
     noSlots: 30,
+    price: 5000,
   }
 
-  const setup = async ({name = instance.name, location = instance.location, dayOfTheYear = instance.dayOfTheYear, year = instance.year, daysRule = instance.daysRule, slotsRule = instance.slotsRule, noSlots = instance.noSlots}={}) => {
+  const setup = async ({ name = instance.name, location = instance.location, dayOfTheYear = instance.dayOfTheYear, year = instance.year, daysRule = instance.daysRule, slotsRule = instance.slotsRule, noSlots = instance.noSlots, price = instance.price }={}) => {
     venue = await VenueSlots.new(
       name,
       location,
@@ -21,7 +22,8 @@ contract("VenueSlots", (accounts) => {
       year,
       daysRule,
       slotsRule,
-      noSlots
+      noSlots,
+      price
     );
   }
 
@@ -127,6 +129,16 @@ contract("VenueSlots", (accounts) => {
     assert.equal(endSlot, bookings[0].endHalfHourSlot);
     assert.equal(units, bookings[0].units);
     assert.equal(instance.noSlots - units, unitsLeft.toString());
+  })
+
+  it("test", async () => {
+    await setup();
+    const pin = await venue.book.call(2,1,1,1);
+    const refTx = await venue.book(2,1,1,1);
+    const booking = await venue.getBooking.call(2, 0xC1, pin);
+    const bookingRef = toBN(booking.ref);
+    console.log(bookingRef.toString(2));
+    console.log(pin.toString(2));
   })
 
   it("Should let book when meets all the rules", async () => {
