@@ -33,7 +33,7 @@ contract("Venue", (accounts) => {
       error = err;
     }
     assert(error, "should throw an error");
-    assert(error.data.reason, "wrong amount");
+    assert.equal("wrong amount", error.data.reason);
     const balanceAfter = await web3.eth.getBalance(accounts[1]);
     assert.equal(balanceBefore, balanceAfter);
   });
