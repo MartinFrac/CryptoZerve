@@ -108,7 +108,6 @@ contract VenueSlots {
     createBooking(day, startSlot, endSlot, units, _price, ref);
     fillSlots(endSlot - startSlot + 1, day, startSlot, units);
     _payedSlots -= (endSlot - startSlot + 1) * units;
-    emit Test(uint16(ref));
     return uint16(ref);
   }
 

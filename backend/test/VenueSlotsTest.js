@@ -227,15 +227,20 @@ contract("VenueSlots", (accounts) => {
     const bookTx = await venue.book(day,1,1,1,1, {value: price, from: accounts[1]});
     const bookings = await venue.getBookings(accounts[1]);
 
-    const ownerBalanceBefore = toBN(await web3.eth.getBalance(accounts[0]));
     const confirmCall = toBN(await venue.confirmAttendance.call(day, addressEnd, pin));
-    const confirmTx = await venue.confirmAttendance(day, addressEnd, pin);
+
+    const ownerBalanceBefore = toBN(await web3.eth.getBalance(accounts[0]));
+    const confirmTx = await venue.confirmAttendance(day, addressEnd, pin, {from: accounts[0]});
     const ownerBalanceAfter = toBN(await web3.eth.getBalance(accounts[0]));
+
     const gasUsed = toBN(confirmTx.receipt.gasUsed);
     const gasPrice = toBN(confirmTx.receipt.effectiveGasPrice);
-    const gasSum = gasUsed.add(gasPrice);
-    const mulPrice = price.mul(toBN(2));
+    const gasSum = gasUsed.mul(gasPrice);
+
     const subGas = ownerBalanceBefore.sub(gasSum);
+
+    const mulPrice = price.mul(toBN(2));
+
     const expected = subGas.add(mulPrice);
     assert.equal(expected.toString(), ownerBalanceAfter.toString());
   })
