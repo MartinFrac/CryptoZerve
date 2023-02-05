@@ -8,8 +8,6 @@ type Props = {
   details: Data;
 };
 
-//TODO: invoke ask for booking
-//TODO: invoke propose offer
 //TODO: invoke book
 const Listing: React.FC<Props> = (props) => {
   const mmContext = useMMContext();

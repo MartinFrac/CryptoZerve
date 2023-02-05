@@ -15,6 +15,7 @@ contract VenueSlots {
   //what year i.e. 2025
 
   uint256 private _payedSlots;
+  //number of slots that are covered by the owner
   mapping(uint32 => Booking) private _refToBooking;
   mapping(address => Booking[]) private _bookings;
   uint16 private _afterExpire;
