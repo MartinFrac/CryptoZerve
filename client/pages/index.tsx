@@ -14,7 +14,7 @@ const Home: NextPage = () => {
       </Head>
       <div className='flex flex-row justify-evenly'>
         <Activity />
-        <Membership />
+        {/* <Membership /> */}
       </div>
       <div>
         <Programme />

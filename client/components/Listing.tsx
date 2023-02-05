@@ -1,6 +1,6 @@
 import React from "react";
 import { Data } from "../pages/api/listings";
-import VENUE_ABI from "../abi/Venue.json";
+import VENUE_ABI from "../abi/VenueSlots.json";
 import { useMMContext } from "../context/MetamaskContext";
 import { ethers } from "ethers";
 
@@ -18,13 +18,13 @@ const Listing: React.FC<Props> = (props) => {
     if (user === null) {
       alert("Provider not injected");
       return;
-    }
+    }    
     const VenueContract = new ethers.Contract(
-      "0xe78A0F7E598Cc8b0Bb87894B0F60dD2a88d6a8Ab",
+      "0x254dffcd3277C0b1660F6d42EFbB754edaBAbC2B",
       VENUE_ABI,
       provider
     );
-    const response = await VenueContract.checkOffers(); 
+    const response = await VenueContract.name(); 
     console.log(response);
   };
 
@@ -34,9 +34,7 @@ const Listing: React.FC<Props> = (props) => {
       <div>{props.details.description}</div>
       <div>{props.details.price.toString()}</div>
       <div>{props.details.venue}</div>
-      <button onClick={request} className="bg-white max-w-md m-2">Ask for booking</button>
-      <button className="bg-white max-w-md m-2">Propose offer</button>
-      <button className="bg-white max-w-md m-2">Book</button>
+      <button onClick={() => request()} className="bg-white max-w-md m-2">Book</button>
     </div>
   );
 };

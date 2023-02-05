@@ -13,7 +13,7 @@ const Listings: NextPage = () => {
       .then((data) => {
         setListings(data);
       });
-  });
+  }, []);
 
   const listingsComponent = listings.map(item => {
     return <Listing key={item.name} details={item} />
