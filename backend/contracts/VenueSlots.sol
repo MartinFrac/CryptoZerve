@@ -31,6 +31,10 @@ contract VenueSlots {
 
   //=====GETTERS=====
 
+  function getNOPayedSlots() external view onlyOwner returns(uint256) {
+    return _payedSlots;
+  }
+
   function getNOFreeSlotUnits(uint16 day, uint8 slot) external view returns(uint64) {
     return _nOSlotsPerHalfHour - _halfHourSlotToUnits[convertToDayPlusHalfHourMap(day, slot)];
   }
@@ -132,7 +136,7 @@ contract VenueSlots {
   //ref = date + address(2) + random
   //123 1f 0547
   //[8], [8], [16]
-  //within a day there is 15**2 * 10_000 permutations = 2_250_000 different references available
+  //within a day there is 15**2[address(2)] * 10_000[pin] permutations = 2_250_000 different references available
   function createRef(uint8 day, address user, uint16 pin) private view returns(uint32) {
     //encode day
     uint32 ref = day * 2 ** 24;

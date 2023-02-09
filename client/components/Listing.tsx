@@ -8,7 +8,6 @@ type Props = {
   details: Data;
 };
 
-//TODO: invoke book
 const Listing: React.FC<Props> = (props) => {
   const mmContext = useMMContext();
   const user = mmContext.account;
@@ -18,14 +17,27 @@ const Listing: React.FC<Props> = (props) => {
     if (user === null) {
       alert("Provider not injected");
       return;
-    }    
+    }
+    const signer = provider.getSigner();
     const VenueContract = new ethers.Contract(
-      "0x254dffcd3277C0b1660F6d42EFbB754edaBAbC2B",
+      "0x5b1869D9A4C187F2EAa108f3062412ecf0526b24",
       VENUE_ABI,
       provider
     );
-    const response = await VenueContract.name(); 
-    console.log(response);
+    try {
+      const VenueContractWithSigner = VenueContract.connect(signer);
+      // const price = await VenueContract.price();
+      const response = await VenueContractWithSigner.book(6, 6, 6, 1, 1, {
+        value: 5000,
+        from: user
+      });
+      // const call = await VenueContract["getBookings()"]({ from: user });
+      console.log(response);
+      // console.log("bookings: " + call);
+      // console.log(price.toString());
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -34,7 +46,9 @@ const Listing: React.FC<Props> = (props) => {
       <div>{props.details.description}</div>
       <div>{props.details.price.toString()}</div>
       <div>{props.details.venue}</div>
-      <button onClick={() => request()} className="bg-white max-w-md m-2">Book</button>
+      <button onClick={() => request()} className="bg-white max-w-md m-2">
+        Book
+      </button>
     </div>
   );
 };

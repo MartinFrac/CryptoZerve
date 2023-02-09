@@ -1,6 +1,8 @@
 const VenueSlots = artifacts.require("VenueSlots");
 const { toBN } = web3.utils;
 
+const ownerEnding = 0xC1;
+
 contract("VenueSlots", (accounts) => {
   let venue;
   let instance = {
@@ -154,7 +156,7 @@ contract("VenueSlots", (accounts) => {
       const bookCall = await venue.book.call(day,1,1,1,1, {value: instance.price});
       const bookTx = await venue.book(day,1,1,1,1, {value: instance.price});
       try {
-        await venue.confirmAttendance(day, 0xC1, bookCall.add(toBN(1)));
+        await venue.confirmAttendance(day, ownerEnding, bookCall.add(toBN(1)));
       } catch (err) {
         error = err;
       }
@@ -200,7 +202,7 @@ contract("VenueSlots", (accounts) => {
     const ref = await venue.book.call(day,1,1,1,1, {value: instance.price});
     const bookTx = await venue.book(day,1,1,1,1, {value: instance.price});
     const bookings = await venue.getBookings();
-    const booking = await venue.getBooking.call(day, 0xC1, ref);
+    const booking = await venue.getBooking.call(day, ownerEnding, ref);
     assert.equal(bookings[0].ref, booking.ref);
   })
 
