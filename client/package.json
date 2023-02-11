@@ -6,6 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "ganache": "ganache -m \"$MNEMONIC\" --database.dbPath=/home/martin/Projects/ganache",
     "lint": "next lint"
   },
   "dependencies": {

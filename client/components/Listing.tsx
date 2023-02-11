@@ -20,21 +20,18 @@ const Listing: React.FC<Props> = (props) => {
     }
     const signer = provider.getSigner();
     const VenueContract = new ethers.Contract(
-      "0x5b1869D9A4C187F2EAa108f3062412ecf0526b24",
+      props.details.address,
       VENUE_ABI,
       provider
     );
     try {
       const VenueContractWithSigner = VenueContract.connect(signer);
-      // const price = await VenueContract.price();
       const response = await VenueContractWithSigner.book(6, 6, 6, 1, 1, {
         value: 5000,
         from: user
       });
       // const call = await VenueContract["getBookings()"]({ from: user });
       console.log(response);
-      // console.log("bookings: " + call);
-      // console.log(price.toString());
     } catch (err) {
       console.log(err);
     }

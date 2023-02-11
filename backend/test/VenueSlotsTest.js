@@ -1,7 +1,8 @@
 const VenueSlots = artifacts.require("VenueSlots");
 const { toBN } = web3.utils;
 
-const ownerEnding = 0xC1;
+const ownerEnding = 0xA1;
+const account1Ending = 0x0E;
 
 contract("VenueSlots", (accounts) => {
   let venue;
@@ -186,7 +187,7 @@ contract("VenueSlots", (accounts) => {
     const bookCall = await venue.book.call(daySlot, startSlot, endSlot, units, 1, {value: price, from: accounts[1]});
     const bookTx = await venue.book(daySlot, startSlot, endSlot, units, 1, {value: price, from: accounts[1]});
     const bookings = await venue.getBookings.call(accounts[1]);
-    const booking = await venue.getBooking(daySlot, 0xF0, bookCall);
+    const booking = await venue.getBooking(daySlot, account1Ending, bookCall);
     const unitsLeft = await venue.getNOFreeSlotUnits(daySlot, startSlot);
     assert.equal(daySlot, bookings[0].daySlot);
     assert.equal(startSlot, bookings[0].startHalfHourSlot);
@@ -209,7 +210,7 @@ contract("VenueSlots", (accounts) => {
   it("Confirm should convert ref correctly", async () => {
     await setup();
     const day = 2;
-    const addressEnd = 0xF0;
+    const addressEnd = account1Ending;
     let pin;
     const bookCall = toBN(await venue.book.call(day,1,1,1,1, {value: instance.price, from: accounts[1]}));
     pin = bookCall;
@@ -222,7 +223,7 @@ contract("VenueSlots", (accounts) => {
     await setup();
     let pin;
     const day = 2;
-    const addressEnd = 0xF0;
+    const addressEnd = account1Ending;
     const price = toBN(instance.price);
     const bookCall = toBN(await venue.book.call(day,1,1,1,1, {value: price, from: accounts[1]}));
     pin = bookCall;

@@ -3,7 +3,10 @@ import React from 'react'
 const Activity = () => {
   return (
     <div className='m-12 rounded-2xl bg-blue-400 flex flex-col items-start px-4 py-4'>
-      <div>Activity</div>
+      <div className='flex flex-row justify-evenly w-full'>
+        <div>Activity:</div>
+        <input></input>
+      </div>
       <div className='flex flex-row justify-center'>
         <input type="text" className='bg-inherit px-2' />
         <div className='px-2'>
