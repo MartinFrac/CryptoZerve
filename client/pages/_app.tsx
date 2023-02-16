@@ -9,7 +9,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     <>
       <MetamaskContextProvider>
         <Header />
-        <div className="min-h-[calc(100vh-6rem)]">
+        <div className="min-h-[calc(100vh-6rem)] px-[6rem] py-[6rem]">
           <Component {...pageProps} />
         </div>
         <Footer />
