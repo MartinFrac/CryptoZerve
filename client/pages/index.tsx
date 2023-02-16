@@ -4,6 +4,14 @@ import Activity from '../components/Activity'
 import Membership from '../components/Membership'
 import Programme from '../components/Programme'
 
+type BookingParams = {
+  day: number,
+  startSlot: number,
+  endSlot: number,
+  units: number,
+  pin: number,
+}
+
 const Home: NextPage = () => {
   return (
     <div className='text-center'>

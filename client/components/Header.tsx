@@ -1,5 +1,6 @@
 import React from 'react'
 import { useMMContext } from '../context/MetamaskContext';
+import Link from 'next/link'
 
 const Header = () => {
   const mmContext = useMMContext();

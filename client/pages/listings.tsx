@@ -3,12 +3,16 @@ import Head from "next/head";
 import { useEffect, useState } from "react";
 import Listing from "../components/Listing";
 import { Data } from "./api/listings";
+import { useRouter } from "next/router";
 
 const Listings: NextPage = () => {
   const [listings, setListings] = useState<Data[]>([]);
+  const router = useRouter();
+  const routerData = router.query;
 
   useEffect(() => {
-    fetch("/api/listings")
+    console.log(routerData.name)
+    fetch(`/api/listings/${routerData.name}`)
       .then((res) => res.json())
       .then((data) => {
         setListings(data);
@@ -16,7 +20,7 @@ const Listings: NextPage = () => {
   }, []);
 
   const listingsComponent = listings.map(item => {
-    return <Listing key={item.name} details={item} />
+    return <Listing key={item.id} details={item} />
   })
 
   return (
