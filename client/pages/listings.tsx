@@ -4,15 +4,15 @@ import { useEffect, useState } from "react";
 import Listing from "../components/Listing";
 import { Data } from "./api/listings";
 import { useRouter } from "next/router";
+import { useFiltersContext } from "../context/FiltersContext";
 
 const Listings: NextPage = () => {
   const [listings, setListings] = useState<Data[]>([]);
-  const router = useRouter();
-  const routerData = router.query;
+  const filtersContext = useFiltersContext();
 
   useEffect(() => {
-    console.log(routerData.name)
-    fetch(`/api/listings/${routerData.name}`)
+    console.log(filtersContext.filters)
+    fetch(`/api/listings/${filtersContext.filters.name}`)
       .then((res) => res.json())
       .then((data) => {
         setListings(data);

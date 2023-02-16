@@ -3,6 +3,7 @@ import { Data } from "../pages/api/listings";
 import VENUE_ABI from "../abi/VenueSlots.json";
 import { useMMContext } from "../context/MetamaskContext";
 import { ethers } from "ethers";
+import { useFiltersContext } from "../context/FiltersContext";
 
 type Props = {
   details: Data;
@@ -12,6 +13,8 @@ const Listing: React.FC<Props> = (props) => {
   const mmContext = useMMContext();
   const user = mmContext.account;
   const provider = mmContext.provider;
+  const filtersContext = useFiltersContext();
+  const { filters } = filtersContext;
 
   const request = async () => {
     if (user === null) {
@@ -25,13 +28,20 @@ const Listing: React.FC<Props> = (props) => {
       provider
     );
     try {
+      const pin = Math.floor(Math.random() * 10_000);
       const VenueContractWithSigner = VenueContract.connect(signer);
       //day, startslot, endslot, units, pin
-      const response = await VenueContractWithSigner.book(6, 6, 6, 1, 1, {
-        value: 5000,
-        from: user
-      });
-      // const call = await VenueContract["getBookings()"]({ from: user });
+      const response = await VenueContractWithSigner.book(
+        6,
+        filters.slotsStart,
+        filters.slotsEnd,
+        filters.units,
+        pin,
+        {
+          value: 5000,
+          from: user,
+        }
+      );
       console.log(response);
     } catch (err) {
       console.log(err);

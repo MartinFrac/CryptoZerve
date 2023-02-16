@@ -3,6 +3,7 @@ import type { AppProps } from "next/app";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { MetamaskContextProvider } from "../context/MetamaskContext";
+import { FiltersContextProvider } from "../context/FiltersContext";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -10,9 +11,12 @@ function MyApp({ Component, pageProps }: AppProps) {
       <MetamaskContextProvider>
         <Header />
         <div className="min-h-[calc(100vh-6rem)] px-[6rem] py-[6rem]">
-          <Component {...pageProps} />
+          <FiltersContextProvider>
+            <Component {...pageProps} />
+          </FiltersContextProvider>
         </div>
         <Footer />
+       
       </MetamaskContextProvider>
     </>
   );
