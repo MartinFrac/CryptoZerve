@@ -7,7 +7,7 @@ const Header = () => {
   const user = mmContext.account;
 
   return (
-    <div className='bg-gray-300 flex justify-between items-center px-8 py-2'>
+    <div className='fixed w-full bg-gray-300 flex justify-between items-center px-8 py-2'>
       <div className='flex flex-row gap-6 items-stretch'>
         <Link href="/"><div className={styles}>CryptoZerve</div></Link>
         <div className='rounded-full bg-yellow-600 px-2 py-4 flex items-center'>USDT</div>

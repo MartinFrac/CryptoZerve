@@ -8,8 +8,6 @@ type Props = {
   details: Data;
 };
 
-
-
 const Listing: React.FC<Props> = (props) => {
   const mmContext = useMMContext();
   const user = mmContext.account;
@@ -28,6 +26,7 @@ const Listing: React.FC<Props> = (props) => {
     );
     try {
       const VenueContractWithSigner = VenueContract.connect(signer);
+      //day, startslot, endslot, units, pin
       const response = await VenueContractWithSigner.book(6, 6, 6, 1, 1, {
         value: 5000,
         from: user
