@@ -30,11 +30,13 @@ const Listing: React.FC<Props> = (props) => {
     try {
       const pin = Math.floor(Math.random() * 10_000);
       const VenueContractWithSigner = VenueContract.connect(signer);
+      const slotsStart = 0;
+      const slotsEnd = 0;
       //day, startslot, endslot, units, pin
       const response = await VenueContractWithSigner.book(
         6,
-        filters.slotsStart,
-        filters.slotsEnd,
+        slotsStart,
+        slotsEnd,
         filters.units,
         pin,
         {

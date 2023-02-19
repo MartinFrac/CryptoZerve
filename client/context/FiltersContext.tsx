@@ -14,16 +14,20 @@ type Filters = {
   name: string;
   units: number;
   day: Date | null;
-  slotsStart: number;
-  slotsEnd: number;
+  hourStart: number;
+  hourEnd: number;
+  minuteStart: number;
+  minuteEnd: number;
 }
 
 const emptyObject = {
   name: '',
   units: 1,
   day: null,
-  slotsStart: 0,
-  slotsEnd: 47,
+  hourStart: 12,
+  hourEnd: 13,
+  minuteStart: 0,
+  minuteEnd: 0,
 };
 
 const FiltersContext = createContext<ContextProps>({

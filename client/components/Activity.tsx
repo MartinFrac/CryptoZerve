@@ -1,43 +1,87 @@
-import React, { useState } from 'react'
-import Link from 'next/link'
-import { useFiltersContext } from '../context/FiltersContext';
+import React, { useEffect, useState } from "react";
+import Link from "next/link";
+import { useFiltersContext } from "../context/FiltersContext";
+import Time from "./Activity/Time";
+import Units from "./Activity/Units";
+import Calendar from "./Activity/Calendar";
 
 const Activity = () => {
-  const [name, setName] = useState<string>('');
+  const [name, setName] = useState<string>("");
   const filtersContext = useFiltersContext();
   const setFilters = filtersContext.setFilters;
+  const filters = filtersContext.filters;
+
+  useEffect(() => {
+    console.log(filters);
+  }, [filters])
 
   const onSubmit = () => {
     if (!setFilters) return;
-    setFilters({name: name, units: 1, day: new Date(), slotsStart: 6, slotsEnd: 6})
-  }
+    setFilters({
+      name: name,
+      units: 1,
+      day: new Date(),
+      hourStart: 12,
+      hourEnd: 13,
+      minuteStart: 0,
+      minuteEnd: 0,
+    });
+  };
+
+  const setStartTime = (hour: number, minutes: number) => {
+    if (!setFilters) return;
+    setFilters((prev) => ({
+      ...prev,
+      hourStart: hour,
+      minuteStart: minutes,
+    }));
+  };
+
+  const setEndTime = (hour: number, minutes: number) => {
+    if (!setFilters) return;
+    setFilters((prev) => ({
+      ...prev,
+      hourEnd: hour,
+      minuteEnd: minutes,
+    }));
+  };
 
   return (
-    <div className='m-12 rounded-2xl bg-blue-400 flex flex-col items-start px-4 py-4'>
-      <div className='flex flex-row justify-evenly w-full'>
+    <div className="m-12 rounded-2xl bg-blue-400 flex flex-col items-start px-4 py-4">
+      <div className="flex flex-row justify-evenly w-full">
         <div>Activity:</div>
-        <input type='text' value={name} onChange={e => { setName(e.currentTarget.value);}}/>
+        <input
+          type="text"
+          value={name}
+          onChange={(e) => {
+            setName(e.currentTarget.value);
+          }}
+        />
       </div>
-      <div className='flex flex-row justify-center'>
-        <input type="text" className='bg-inherit px-2' />
-        <div className='px-2'>
-          datepicker
+      <div className="flex flex-row justify-center">
+        <div className="px-2">
+          <Calendar />
         </div>
-        <div className='px-2'>
-          slots
+        <div className="px-2">
+          <Time setTime={setStartTime} />
+          <Time setTime={setEndTime}/>
         </div>
-        <div className='px-2'>
-          number of people
+        <div className="px-2">
+          <Units />
         </div>
-        <Link href={{
-          pathname: '/listings',
-          query: { name: name }
-        }}>
-          <button onClick={onSubmit} className='px-2'>Search</button>
+        <Link
+          href={{
+            pathname: "/listings",
+            query: { name: name },
+          }}
+        >
+          <button onClick={onSubmit} className="px-4 py-4 bg-white">
+            Search
+          </button>
         </Link>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Activity
+export default Activity;
