@@ -16,13 +16,12 @@ const Listing: React.FC<Props> = (props) => {
   const filtersContext = useFiltersContext();
   const { filters } = filtersContext;
 
-  const getDayOfYear = (): number => {
-    const now = new Date();
-    const startOfYear = new Date(now.getFullYear(), 0, 0);
+  const getDayOfYear = (date: Date): number => {
+    const startOfYear = new Date(date.getFullYear(), 0, 0);
     const diff =
-      now.getTime() -
+      date.getTime() -
       startOfYear.getTime() +
-      (startOfYear.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000;
+      (startOfYear.getTimezoneOffset() - date.getTimezoneOffset()) * 60 * 1000;
     const oneDay = 1000 * 60 * 60 * 24;
     const dayOfYear = Math.floor(diff / oneDay);
     return dayOfYear;
@@ -41,7 +40,7 @@ const Listing: React.FC<Props> = (props) => {
     );
     try {
       const pin = Math.floor(Math.random() * 10_000);
-      const dayOfTheYear = getDayOfYear();
+      const dayOfTheYear = getDayOfYear(filters.day);
       const day = dayOfTheYear - props.details.startDay;
       const convertMinutesStart = filters.minuteStart == 0 ? 0 : 1;
       const convertMinutesEnd = filters.minuteEnd == 0 ? 0 : 1;

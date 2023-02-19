@@ -9,7 +9,6 @@ const Time: React.FC<Props> = ({ setTime }) => {
   const [hours, setHours] = useState<number>(0);
   const [minutes, setMinutes] = useState<number>(0);
   const filtersContext = useFiltersContext();
-  const setFilters = filtersContext.setFilters;
 
   const handleHoursChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const value = parseInt(event.target.value, 10);

@@ -13,7 +13,7 @@ type ContextProps = {
 type Filters = {
   name: string;
   units: number;
-  day: Date | null;
+  day: Date;
   hourStart: number;
   hourEnd: number;
   minuteStart: number;
@@ -23,7 +23,7 @@ type Filters = {
 const emptyObject = {
   name: '',
   units: 1,
-  day: null,
+  day: new Date(),
   hourStart: 12,
   hourEnd: 13,
   minuteStart: 0,

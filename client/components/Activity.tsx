@@ -15,6 +15,14 @@ const Activity = () => {
     console.log(filters);
   }, [filters])
 
+  const setDay = (day: Date) => {
+    if (!setFilters) return;
+    setFilters((prev) => ({
+      ...prev,
+      day: day,
+    }));
+  }
+
   const setUnits = (units: number) => {
     if (!setFilters) return;
     setFilters((prev) => ({
@@ -55,7 +63,7 @@ const Activity = () => {
       </div>
       <div className="flex flex-row justify-center">
         <div className="px-2">
-          <Calendar />
+          <Calendar onSetDay={setDay} />
         </div>
         <div className="px-2">
           <Time setTime={setStartTime} />

@@ -3,9 +3,10 @@ import React, { useState } from "react";
 type CalendarProps = {
   year?: number;
   month?: number;
+  onSetDay: (day: Date) => void;
 };
 
-const Calendar: React.FC<CalendarProps> = ({ year = new Date().getFullYear(), month = new Date().getMonth() + 1 }) => {
+const Calendar: React.FC<CalendarProps> = ({ year = new Date().getFullYear(), month = new Date().getMonth() + 1, onSetDay }) => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [currentMonth, setCurrentMonth] = useState<number>(month);
   const [currentYear, setCurrentYear] = useState<number>(year);
@@ -19,6 +20,7 @@ const Calendar: React.FC<CalendarProps> = ({ year = new Date().getFullYear(), mo
   const handleDayClick = (day: number) => {
     const date = new Date(currentYear, currentMonth - 1, day);
     setSelectedDate(date);
+    onSetDay(date);
   };
 
   const handlePrevMonthClick = () => {
