@@ -15,19 +15,6 @@ const Activity = () => {
     console.log(filters);
   }, [filters])
 
-  const onSubmit = () => {
-    if (!setFilters) return;
-    setFilters({
-      name: name,
-      units: 1,
-      day: new Date(),
-      hourStart: 12,
-      hourEnd: 13,
-      minuteStart: 0,
-      minuteEnd: 0,
-    });
-  };
-
   const setUnits = (units: number) => {
     if (!setFilters) return;
     setFilters((prev) => ({
@@ -83,7 +70,7 @@ const Activity = () => {
             query: { name: name },
           }}
         >
-          <button onClick={onSubmit} className="px-4 py-4 bg-white">
+          <button className="px-4 py-4 bg-white">
             Search
           </button>
         </Link>

@@ -3,7 +3,6 @@ import Head from "next/head";
 import { useEffect, useState } from "react";
 import Listing from "../components/Listing";
 import { Data } from "./api/listings";
-import { useRouter } from "next/router";
 import { useFiltersContext } from "../context/FiltersContext";
 
 const Listings: NextPage = () => {

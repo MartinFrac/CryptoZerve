@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Data } from "../pages/api/listings";
 import VENUE_ABI from "../abi/VenueSlots.json";
 import { useMMContext } from "../context/MetamaskContext";
@@ -16,6 +16,18 @@ const Listing: React.FC<Props> = (props) => {
   const filtersContext = useFiltersContext();
   const { filters } = filtersContext;
 
+  const getDayOfYear = (): number => {
+    const now = new Date();
+    const startOfYear = new Date(now.getFullYear(), 0, 0);
+    const diff =
+      now.getTime() -
+      startOfYear.getTime() +
+      (startOfYear.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000;
+    const oneDay = 1000 * 60 * 60 * 24;
+    const dayOfYear = Math.floor(diff / oneDay);
+    return dayOfYear;
+  };
+
   const request = async () => {
     if (user === null) {
       alert("Provider not injected");
@@ -29,18 +41,25 @@ const Listing: React.FC<Props> = (props) => {
     );
     try {
       const pin = Math.floor(Math.random() * 10_000);
+      const dayOfTheYear = getDayOfYear();
+      const day = dayOfTheYear - props.details.startDay;
+      const convertMinutesStart = filters.minuteStart == 0 ? 0 : 1;
+      const convertMinutesEnd = filters.minuteEnd == 0 ? 0 : 1;
+      const slotsStart = filters.hourStart * 2 + convertMinutesStart;
+      const slotsEnd = filters.hourEnd * 2 + convertMinutesEnd;
+      const nOSlots = slotsEnd - slotsStart;
+      const cost = props.details.price * filters.units * nOSlots;
+
+      console.log(`pin: ${pin}, day: ${day}, ss:${slotsStart}, se: ${slotsEnd}, cost: ${cost}`)
       const VenueContractWithSigner = VenueContract.connect(signer);
-      const slotsStart = 0;
-      const slotsEnd = 0;
-      //day, startslot, endslot, units, pin
       const response = await VenueContractWithSigner.book(
-        6,
+        day,
         slotsStart,
         slotsEnd,
         filters.units,
         pin,
         {
-          value: 5000,
+          value: cost,
           from: user,
         }
       );
@@ -51,12 +70,15 @@ const Listing: React.FC<Props> = (props) => {
   };
 
   return (
-    <div className="bg-slate-600 flex flex-col m-4 py-4 items-center">
-      <div>{props.details.name}</div>
-      <div>{props.details.description}</div>
-      <div>{props.details.price.toString()}</div>
-      <div>{props.details.venue}</div>
-      <button onClick={() => request()} className="bg-white max-w-md m-2">
+    <div className="bg-slate-600 flex flex-col m-4 px-4 py-4 items-start rounded text-white">
+      <div>Name: {props.details.name}</div>
+      <div>Description: {props.details.description}</div>
+      <div>Price: {props.details.price.toString()}</div>
+      <div>Venue: {props.details.venue}</div>
+      <button
+        onClick={() => request()}
+        className="bg-white max-w-md px-2 py-2 mt-2 text-black"
+      >
         Book
       </button>
     </div>

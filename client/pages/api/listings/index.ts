@@ -9,8 +9,9 @@ export type Data = {
   owner: string;
   name: string;
   description: string;
-  price: Number;
+  price: number;
   venue: string;
+  startDay: number;
 };
 
 export default async function handler(
@@ -31,6 +32,7 @@ export default async function handler(
           description: doc.data().description,
           price: doc.data().price,
           venue: doc.data().venue,
+          startDay: doc.data().startDay,
         })
       });
     } catch (e) {
