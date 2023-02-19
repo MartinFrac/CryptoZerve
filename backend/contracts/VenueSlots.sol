@@ -21,7 +21,7 @@ contract VenueSlots {
   uint16 private _afterExpire;
   //for now 6 months, 180 days - what days were made available to book
   uint256 private _slotsDaysRule;
-  //what days in the year are available
+  //what days are available starting from startDayOfTheContract
   uint64 private _slotsHalfHourRule;
   //what hours in the day are available
   uint64 private _nOSlotsPerHalfHour;
@@ -166,7 +166,7 @@ contract VenueSlots {
 
   function checkRules(uint16 day, uint8 startSlot, uint8 endSlot, uint8 units, uint256 _price) view private returns(bool) {
     //check day against contract expiration
-    require(day < (startDayOfTheContract + _afterExpire) && day >= startDayOfTheContract, "booking day is not within contract constraints");
+    require(day < _afterExpire && day >= 1, "booking day is not within contract constraints");
     //check day against day rule bit
     uint256 isDayMatched = _slotsDaysRule & (1 << (day - 1));
     require(isDayMatched > 0, "Day needs to be available for the venue");

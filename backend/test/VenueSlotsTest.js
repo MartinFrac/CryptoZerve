@@ -60,10 +60,9 @@ contract("VenueSlots", (accounts) => {
       assert.equal("booking day is not within contract constraints", error.data.reason);
     });
 
-    it("Book should throw when before contract start", async () => {
-      const startDay = 5;
-      const bookDay = startDay - 1;
-      await setup({dayOfTheYear: 5})
+    it("Book should throw when after expiration", async () => {
+      const bookDay = 181;
+      await setup()
       let error;
       try {
         await venue.book(bookDay, 1, 1, 1, 1);
