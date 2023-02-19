@@ -28,6 +28,14 @@ const Activity = () => {
     });
   };
 
+  const setUnits = (units: number) => {
+    if (!setFilters) return;
+    setFilters((prev) => ({
+      ...prev,
+      units: units,
+    }));
+  }
+
   const setStartTime = (hour: number, minutes: number) => {
     if (!setFilters) return;
     setFilters((prev) => ({
@@ -64,10 +72,10 @@ const Activity = () => {
         </div>
         <div className="px-2">
           <Time setTime={setStartTime} />
-          <Time setTime={setEndTime}/>
+          <Time setTime={setEndTime} />
         </div>
         <div className="px-2">
-          <Units />
+          <Units onSetUnits={setUnits} />
         </div>
         <Link
           href={{
