@@ -39,7 +39,7 @@ const Listing: React.FC<Props> = (props) => {
       provider
     );
     try {
-      const pin = Math.floor(Math.random() * 10_000);
+      const pin = Math.floor(Math.random() * 10_000) + 1;
       const dayOfTheYear = getDayOfYear(filters.day);
       const day = dayOfTheYear - props.details.startDay + 1;
       const convertMinutesStart = filters.minuteStart == 0 ? 0 : 1;
