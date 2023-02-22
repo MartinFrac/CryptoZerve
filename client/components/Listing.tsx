@@ -50,7 +50,9 @@ const Listing: React.FC<Props> = (props) => {
       const cost = props.details.price * filters.units * nOSlots;
 
       console.log(filters);
-      console.log(`pin: ${pin}, day: ${day}, ss:${slotsStart}, se: ${slotsEnd}, cost: ${cost}`)
+      console.log(
+        `pin: ${pin}, day: ${day}, ss:${slotsStart}, se: ${slotsEnd}, cost: ${cost}`
+      );
       const VenueContractWithSigner = VenueContract.connect(signer);
       const response = await VenueContractWithSigner.book(
         day,
@@ -64,6 +66,24 @@ const Listing: React.FC<Props> = (props) => {
         }
       );
       console.log(response);
+
+      fetch("/api/myBookings", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          bookingTypeID: props.details.id,
+          day: filters.day.toDateString(),
+          hourEnd: filters.hourEnd,
+          hourStart: filters.hourStart,
+          minuteEnd: filters.minuteStart,
+          minuteStart: filters.minuteStart,
+          name: props.details.name,
+          pin: pin,
+          units: filters.units,
+        }),
+      });
     } catch (err) {
       console.log(err);
     }
