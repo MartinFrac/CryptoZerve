@@ -13,7 +13,15 @@ const Activity = () => {
 
   useEffect(() => {
     console.log(filters);
-  }, [filters])
+  }, [filters]);
+
+  const setDay = (date: Date) => {
+    if (!setFilters) return;
+    setFilters((prev) => ({
+      ...prev,
+      day: date,
+    }));
+  };
 
   const setUnits = (units: number) => {
     if (!setFilters) return;
@@ -21,7 +29,7 @@ const Activity = () => {
       ...prev,
       units: units,
     }));
-  }
+  };
 
   const setStartTime = (hour: number, minutes: number) => {
     if (!setFilters) return;
@@ -55,7 +63,7 @@ const Activity = () => {
       </div>
       <div className="flex flex-row justify-center">
         <div className="px-2">
-          <Calendar />
+          <Calendar onSetDate={setDay}/>
         </div>
         <div className="px-2">
           <Time setTime={setStartTime} />
@@ -70,9 +78,7 @@ const Activity = () => {
             query: { name: name },
           }}
         >
-          <button className="px-4 py-4 bg-white">
-            Search
-          </button>
+          <button className="px-4 py-4 bg-white">Search</button>
         </Link>
       </div>
     </div>

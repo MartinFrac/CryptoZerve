@@ -1,12 +1,14 @@
 import React, { useState } from "react";
+import { useFiltersContext } from "../../context/FiltersContext";
 
 type CalendarProps = {
   year?: number;
   month?: number;
+  onSetDate: (day: Date) => void;
 };
 
-const Calendar: React.FC<CalendarProps> = ({ year = new Date().getFullYear(), month = new Date().getMonth() + 1 }) => {
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+const Calendar: React.FC<CalendarProps> = ({ year = new Date().getFullYear(), month = new Date().getMonth() + 1, onSetDate }) => {
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [currentMonth, setCurrentMonth] = useState<number>(month);
   const [currentYear, setCurrentYear] = useState<number>(year);
 
@@ -19,6 +21,7 @@ const Calendar: React.FC<CalendarProps> = ({ year = new Date().getFullYear(), mo
   const handleDayClick = (day: number) => {
     const date = new Date(currentYear, currentMonth - 1, day);
     setSelectedDate(date);
+    onSetDate(date);
   };
 
   const handlePrevMonthClick = () => {
@@ -62,7 +65,7 @@ const Calendar: React.FC<CalendarProps> = ({ year = new Date().getFullYear(), mo
           {Array.from(Array(Math.ceil(days.length / 7)).keys()).map((week) => (
             <tr key={week}>
               {days.slice(week * 7, week * 7 + 7).map((day, index) => (
-                <td className="cursor-pointer" key={index} onClick={() => handleDayClick(day)}>
+                <td className="cursor-pointer" key={index} onClick={() => handleDayClick(day + 1)}>
                   {day !== null && day + 1}
                 </td>
               ))}
