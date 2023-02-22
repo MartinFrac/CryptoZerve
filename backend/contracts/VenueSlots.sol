@@ -106,6 +106,7 @@ contract VenueSlots {
   
   //=====PUBLIC=====
 
+  //start slot and end slot included: 2, 2 means 2 as start slot and 2 as end slot
   function book(uint8 day, uint8 startSlot, uint8 endSlot, uint8 units, uint16 pin) external payable returns(uint16) {
     uint256 _price = (endSlot - startSlot + 1) * units * price;
     checkRules(day, startSlot, endSlot, units, _price);
@@ -164,6 +165,8 @@ contract VenueSlots {
     return pin;
   }
 
+  //start slot: 00:00 = 1, 00:30 = 2
+  //end slot: 01:00 = 3
   function checkRules(uint16 day, uint8 startSlot, uint8 endSlot, uint8 units, uint256 _price) view private returns(bool) {
     //check day against contract expiration
     require(day < _afterExpire && day >= 1, "booking day is not within contract constraints");
