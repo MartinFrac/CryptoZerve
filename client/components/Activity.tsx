@@ -49,11 +49,12 @@ const Activity = () => {
     }));
   };
 
-  return (
-    <div className="m-12 rounded-2xl bg-blue-400 flex flex-col items-start px-4 py-4">
-      <div className="flex flex-row justify-evenly w-full">
+  const searchAndFilters = (
+    <div className="px-6 py-6 flex flex-col">
+      <div className="py-4 flex flex-row justify-evenly w-full">
         <div>Activity:</div>
         <input
+          className="border-2 border-black rounded-md"
           type="text"
           value={name}
           onChange={(e) => {
@@ -62,27 +63,36 @@ const Activity = () => {
         />
       </div>
       <div className="flex flex-row justify-center">
-        <div className="px-2">
-          <Calendar onSetDate={setDay}/>
-        </div>
-        <div className="px-2">
-          <Time setTime={setStartTime} />
-          <Time setTime={setEndTime} />
-        </div>
-        <div className="px-2">
+        <div className="px-2 flex flex-col gap-4 items-start">
+          <label>
+            Start time:
+            <Time setTime={setStartTime} />
+          </label>
+          <label>
+            End time:
+            <Time setTime={setEndTime} />
+          </label>
           <Units onSetUnits={setUnits} />
+          <Link
+            href={{
+              pathname: "/listings",
+              query: { name: name },
+            }}
+          >
+            <button className="px-4 py-4 bg-black rounded-md text-white hover:bg-white hover:text-black border-2 border-black">Search</button>
+          </Link>
         </div>
-        <Link
-          href={{
-            pathname: "/listings",
-            query: { name: name },
-          }}
-        >
-          <button className="px-4 py-4 bg-white">Search</button>
-        </Link>
+        <div className="px-2">
+          <Calendar onSetDate={setDay} />
+        </div>
       </div>
     </div>
   );
+  const activityContainer = (
+    <div className="m-6 rounded-lg bg-white border-black border-solid border-4">{searchAndFilters}</div>
+  );
+
+  return activityContainer;
 };
 
 export default Activity;

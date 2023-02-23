@@ -22,9 +22,7 @@ const Time: React.FC<Props> = ({ setTime }) => {
   };
 
   return (
-    <div>
-      <label>
-        Hours:
+    <div className="flex flex-row gap-4">
         <select value={hours} onChange={handleHoursChange}>
           {Array.from(Array(24).keys()).map((hour) => (
             <option key={hour} value={hour}>
@@ -32,14 +30,10 @@ const Time: React.FC<Props> = ({ setTime }) => {
             </option>
           ))}
         </select>
-      </label>
-      <label>
-        Minutes:
         <select value={minutes} onChange={handleMinutesChange}>
           <option value="0">0</option>
           <option value="30">30</option>
         </select>
-      </label>
     </div>
   );
 }

@@ -10,7 +10,7 @@ const myBookingTypes = () => {
   const [myBookingTypesList, setMyBookingTypesList] = useState<Data[]>([]);
 
   useEffect(() => {
-    fetch(`/api/myBookings`)
+    fetch(`/api/myBookings/${user}`)
       .then((res) => res.json())
       .then((data) => {
         setMyBookingTypesList(data);

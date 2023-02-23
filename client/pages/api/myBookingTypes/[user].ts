@@ -1,7 +1,7 @@
-import { db } from "../../config/firebase";
-import { collection, getDocs } from "firebase/firestore";
+import { db } from "../../../config/firebase";
+import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { Data } from "./listings";
+import { Data } from "../listings";
 
 export default async function handler(
   req: NextApiRequest,
@@ -11,8 +11,13 @@ export default async function handler(
   let bookings: Data[] = [];
   try {
     //TODO: get ref first from my booking types, then look for data in booking_types
-    const querySnapshot = await getDocs(collection(db, "booking_types"));
-    querySnapshot.forEach((doc) => {
+    const { query } = req;
+    const { user } = query;
+    if (!user) return;
+    const collectionMyBookingTypes = collection(db, 'myBookingTypes', user.toString(), 'bookingTypes');
+    const myBTSnap = await getDocs(collectionMyBookingTypes);
+    const bookingTypesSnap = await getDocs(collection(db, "booking_types"));
+    bookingTypesSnap.forEach((doc) => {
       console.log(`${doc.id} => ${JSON.stringify(doc.data())}`);
       bookings.push({
         id: doc.id,

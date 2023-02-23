@@ -17,11 +17,13 @@ const Header = () => {
         </div>
       </div>
       <div className="flex flex-row gap-6">
-        <Link href='/myBookings'>
+        <Link href="/myBookings">
           <div className={styles}>My Bookings</div>
         </Link>
         <div className={styles}>List your venue</div>
-        <div className={styles}>Register</div>
+        <Link href="/myBookingTypes">
+          <div className={styles}>My Venues</div>
+        </Link>
         {mmContext.account ? (
           <span>{user}</span>
         ) : (
