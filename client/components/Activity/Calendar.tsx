@@ -65,7 +65,7 @@ const Calendar: React.FC<CalendarProps> = ({ year = new Date().getFullYear(), mo
           {Array.from(Array(Math.ceil(days.length / 7)).keys()).map((week) => (
             <tr key={week}>
               {days.slice(week * 7, week * 7 + 7).map((day, index) => (
-                <td className="cursor-pointer" key={index} onClick={() => handleDayClick(day + 1)}>
+                <td className={`cursor-pointer hover:bg-slate-700 hover:text-white ${day + 1 === selectedDate.getDate() && currentMonth - 1 === selectedDate.getMonth() && currentYear === selectedDate.getFullYear() ? 'bg-black text-white' : '' }`} key={index} onClick={(e) => handleDayClick (day + 1)}>
                   {day !== null && day + 1}
                 </td>
               ))}
@@ -73,12 +73,6 @@ const Calendar: React.FC<CalendarProps> = ({ year = new Date().getFullYear(), mo
           ))}
         </tbody>
       </table>
-      {selectedDate && (
-        <div>
-          <h3>Selected Date:</h3>
-          <p>{selectedDate.toDateString()}</p>
-        </div>
-      )}
     </div>
   );
 };
