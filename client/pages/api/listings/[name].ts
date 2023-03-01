@@ -1,4 +1,3 @@
-
 import { db } from "../../../config/firebase";
 import { collection, getDocs } from "firebase/firestore"; 
 import type { NextApiRequest, NextApiResponse } from "next";

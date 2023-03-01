@@ -1,4 +1,4 @@
-import { db } from "../../config/firebase";
+import { db } from "../../../config/firebase";
 import { addDoc, collection, getDocs } from "firebase/firestore";
 import type { NextApiRequest, NextApiResponse } from "next";
 
@@ -19,6 +19,8 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<MyBookingData[]>
 ) {
+  //TODO: update to search by user 
+  console.log("api/mybookings: executed");
   if (req.method === "POST") {
     try {
       const docRef = await addDoc(collection(db, "myBookings"), req.body);
@@ -30,7 +32,6 @@ export default async function handler(
     return res.status(200);
   }
 
-  console.log("api/mybookings: executed");
   let bookings: MyBookingData[] = [];
   try {
     const querySnapshot = await getDocs(collection(db, "myBookings"));

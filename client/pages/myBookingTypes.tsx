@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useMMContext } from '../context/MetamaskContext';
-import MyBooking from '../components/MyBooking';
 import { Data } from './api/listings';
-import Listing from '../components/Listing';
+import MyVenue from '../components/MyVenue';
 
 const myBookingTypes = () => {
   const mmContext = useMMContext();
@@ -10,15 +9,15 @@ const myBookingTypes = () => {
   const [myBookingTypesList, setMyBookingTypesList] = useState<Data[]>([]);
 
   useEffect(() => {
-    fetch(`/api/myBookings/${user}`)
+    fetch(`/api/myBookingTypes/${user}`)
       .then((res) => res.json())
       .then((data) => {
-        setMyBookingTypesList(data);
+        setMyBookingTypesList(data)
       })
   }, []);
 
   const myBookingsComponent = myBookingTypesList.map(item => {
-    return <Listing key={item.id} details={item} />
+    return <MyVenue key={item.id} details={item} />
   })
 
   return (

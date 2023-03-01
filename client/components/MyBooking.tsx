@@ -1,5 +1,5 @@
 import React from "react";
-import { MyBookingData } from "../pages/api/myBookings";
+import { MyBookingData } from "../pages/api/bookings/[user]";
 import { useMMContext } from "../context/MetamaskContext";
 import VENUE_ABI from "../abi/VenueSlots.json";
 import { ethers } from "ethers";

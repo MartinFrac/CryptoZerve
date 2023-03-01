@@ -10,14 +10,14 @@ export default async function handler(
   console.log("api/myBookingTypes: executed");
   let bookings: Data[] = [];
   try {
-    //TODO: get ref first from my booking types, then look for data in booking_types
     const { query } = req;
     const { user } = query;
     if (!user) return;
     const collectionMyBookingTypes = collection(db, 'myBookingTypes', user.toString(), 'bookingTypes');
-    const myBTSnap = await getDocs(collectionMyBookingTypes);
-    const bookingTypesSnap = await getDocs(collection(db, "booking_types"));
-    bookingTypesSnap.forEach((doc) => {
+    const myBTSnaps = await getDocs(collectionMyBookingTypes);
+    const bookingTypesSnaps = await getDocs(collection(db, "booking_types"));
+    bookingTypesSnaps.forEach((doc) => {
+      if (!myBTSnaps.docs.find(d => d.data().ID === doc.id)) return;
       console.log(`${doc.id} => ${JSON.stringify(doc.data())}`);
       bookings.push({
         id: doc.id,
