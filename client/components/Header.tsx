@@ -20,7 +20,9 @@ const Header = () => {
         <Link href="/myBookings">
           <div className={styles}>My Bookings</div>
         </Link>
-        <div className={styles}>List your venue</div>
+        <Link href="/createVenue">
+          <div className={styles}>List your venue</div>
+        </Link>
         <Link href="/myBookingTypes">
           <div className={styles}>My Venues</div>
         </Link>
