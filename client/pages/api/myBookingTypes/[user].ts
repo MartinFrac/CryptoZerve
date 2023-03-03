@@ -1,16 +1,16 @@
 import { db } from "../../../config/firebase";
 import { addDoc, collection, doc, getDoc, getDocs } from "firebase/firestore";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { Data } from "../listings";
+import { Venue } from "../listings";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data[]>
+  res: NextApiResponse<Venue[]>
 ) {
   console.log("api/myBookingTypes: executed");
   const { query } = req;
   const { user } = query;
-  let bookings: Data[] = [];
+  let bookings: Venue[] = [];
 
   if (req.method === "POST") {
     try {

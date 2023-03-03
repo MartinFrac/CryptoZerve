@@ -2,7 +2,7 @@ import { db } from "../../../config/firebase";
 import { collection, getDocs } from "firebase/firestore"; 
 import type { NextApiRequest, NextApiResponse } from "next";
 
-export type Data = {
+export typeVenue = {
   id: string,
   address: string;
   owner: string;
@@ -19,7 +19,7 @@ export default async function handler(
     const { query } = req;
     const { name } = query;
     console.log(`api/listings/${name}: executed`);
-    let listings: Data[] = [];
+    let listings:Venue[] = [];
     try {
       const querySnapshot = await getDocs(collection(db, "booking_types"));
       querySnapshot.forEach((doc) => {

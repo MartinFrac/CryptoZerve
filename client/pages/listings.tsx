@@ -1,11 +1,11 @@
 import type { NextPage } from "next";
 import { useEffect, useState } from "react";
 import Listing from "../components/Listing";
-import { Data } from "./api/listings";
+import { Venue } from "./api/listings";
 import { useFiltersContext } from "../context/FiltersContext";
 
 const Listings: NextPage = () => {
-  const [listings, setListings] = useState<Data[]>([]);
+  const [listings, setListings] = useState<Venue[]>([]);
   const filtersContext = useFiltersContext();
 
   useEffect(() => {

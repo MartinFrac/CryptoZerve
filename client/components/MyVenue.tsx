@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
-import { Data } from "../pages/api/listings";
+import {Venue } from "../pages/api/listings";
 import { useMMContext } from "../context/MetamaskContext";
 
 type Props = {
-  details: Data;
+  details: Venue;
 };
 
 const MyVenue: React.FC<Props> = (props) => {

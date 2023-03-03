@@ -1,12 +1,12 @@
 import React from "react";
-import { Data } from "../pages/api/listings";
+import {Venue } from "../pages/api/listings";
 import VENUE_ABI from "../abi/VenueSlots.json";
 import { useMMContext } from "../context/MetamaskContext";
 import { ethers } from "ethers";
 import { useFiltersContext } from "../context/FiltersContext";
 
 type Props = {
-  details: Data;
+  details: Venue;
 };
 
 const Listing: React.FC<Props> = (props) => {

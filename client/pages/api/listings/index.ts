@@ -3,7 +3,7 @@ import { collection, getDocs } from "firebase/firestore";
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
 
-export type Data = {
+export type Venue = {
   id: string,
   address: string;
   owner: string;
@@ -16,10 +16,10 @@ export type Data = {
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data[]>
+  res: NextApiResponse<Venue[]>
 ) {
     console.log("api/listings: executed");
-    let listings: Data[] = [];
+    let listings:Venue[] = [];
     try {
       const querySnapshot = await getDocs(collection(db, "booking_types"));
       querySnapshot.forEach((doc) => {
