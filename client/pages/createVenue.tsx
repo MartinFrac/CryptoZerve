@@ -1,7 +1,7 @@
 import { NextPage } from "next";
 import React, { useEffect, useState } from "react";
 import { useMMContext } from "../context/MetamaskContext";
-import { ContractFactory } from "ethers";
+import { BigNumber, ContractFactory } from "ethers";
 import VENUE_ABI from "../abi/VenueSlots.json";
 import VENUE_BYTECODE from "../bytecode/VenueSlots.json";
 import Inputs from "../components/CreateVenue/Inputs";
@@ -33,7 +33,7 @@ const createVenue: NextPage = () => {
     console.log(venueObject);
   }, [venueObject]);
 
-  const setRules = (daysRule: number, slotsRule: number, start: number[], end: number[]) => {};
+  const setRules = (daysRule: BigNumber, slotsRule: number, start: number[], end: number[]) => {};
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
