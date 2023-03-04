@@ -1,32 +1,39 @@
 import { NextPage } from "next";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useMMContext } from "../context/MetamaskContext";
 import { ContractFactory } from "ethers";
 import VENUE_ABI from "../abi/VenueSlots.json";
 import VENUE_BYTECODE from "../bytecode/VenueSlots.json";
-import Left from "../components/CreateVenue/Left";
-import Right from "../components/CreateVenue/Right";
+import Inputs from "../components/CreateVenue/Inputs";
+import { Venue } from "./api/listings";
+import RulesComponent from "../components/CreateVenue/RulesComponent";
 
 const createVenue: NextPage = () => {
   const mmContext = useMMContext();
   const user = mmContext.account;
   const provider = mmContext.provider;
-  const [venueObject, setVenueObject] = useState();
-  const [daysRule, setDaysRule] = useState(0);
-  const [slotsRule, setSlotsRule] = useState(0);
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [price, setPrice] = useState("");
-  const [startDay, setStartDay] = useState("");
-  const [venue, setVenue] = useState("");
+  const [venueObject, setVenueObject] = useState<Venue>({
+        id: "",
+        address: "",
+        owner: "",
+        name: "",
+        description: "",
+        price: 0,
+        venue: "",
+        startDay: 0,
+        daysRule: [],
+        startSlotsRule: 0,
+        endSlotsRule: 0,
+  });
+  const [slotsRule, setSlotsRule] = useState<number>(0);
+  const [daysRule, setDaysRule] = useState<number>(0);
+  useEffect(() => {
+    console.log(venueObject)
+  }, [venueObject])
 
-  const setDaysRuleLocal = (rule: number) => {
-    setDaysRule(rule);
-  };
+  const setRules = (daysRule: number, slotsRule: number) => {
 
-  const setSlotsRuleLocal = (rule: number) => {
-    setSlotsRule(rule);
-  };
+  }
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -35,14 +42,14 @@ const createVenue: NextPage = () => {
     const signer = provider.getSigner();
     const factory = new ContractFactory(VENUE_ABI, VENUE_BYTECODE, signer);
     const contract = await factory.deploy(
-      name,
-      venue,
-      startDay,
+      venueObject.name,
+      venueObject.venue,
+      venueObject.startDay,
       currentYear,
       0b110011,
       0b111100001111,
       numberOfSlots,
-      parseInt(price),
+      venueObject.price,
       { value: 20_000 }
     );
     console.log(contract.address);
@@ -55,12 +62,12 @@ const createVenue: NextPage = () => {
       },
       body: JSON.stringify({
         address: contract.address,
-        description: description,
-        name: name,
+        description: venueObject.description,
+        name: venueObject.name,
         owner: user,
-        price: parseInt(price),
-        startDay: parseInt(startDay),
-        venue: venue,
+        price: venueObject.price,
+        startDay: venueObject.startDay,
+        venue: venueObject.venue,
         year: currentYear,
       }),
     });
@@ -72,8 +79,8 @@ const createVenue: NextPage = () => {
       className="max-w-md mx-auto mt-8 bg-white rounded-lg overflow-hidden shadow-md"
     >
       <div className="flex flex-row">
-        <Left />
-        <Right />
+        <Inputs venueObject={venueObject} setVenueObject={setVenueObject}/>
+        <RulesComponent setRules={setRules}/>
       </div>
     </form>
   );

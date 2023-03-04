@@ -1,38 +1,25 @@
 import React, { useState } from "react";
 import Time from "../Activity/Time";
+import DaysOfWeekSelector from "./DaysOfWeekSelector";
 
 type Props = {
-  setDaysRule: (rule: number) => void;
-  setSlotsRule: (rule: number) => void;
+  setRules: (daysRule: number, slotsRule: number) => void;
 }
 
-const SlotsConverter: React.FC<Props> = ({ setDaysRule, setSlotsRule }) => {
+const SlotsConverter: React.FC<Props> = ({ setRules }) => {
   const [timeStart, setTimeStart] = useState({ hour: 0, minute: 0 });
   const [timeEnd, setTimeEnd] = useState({ hour: 0, minute: 0 });
 
   const setStartTime = () => {
 
-    //convert
-    convertSlots();
   }
 
   const setEndTime = () => {
 
-    //convert
-    convertSlots();
   }
 
-  const convertDays = () => {
-    setDaysRule(0b01);
-  };
-
-  const convertSlots = () => {
-    setSlotsRule(0b01);
-  };
-
-  //TODO: add select with days of the week
   return (
-    <div>
+    <div className="flex flex-col gap-8 py-4">
       <label>
         Start time:
         <Time setTime={setStartTime} />
@@ -41,6 +28,7 @@ const SlotsConverter: React.FC<Props> = ({ setDaysRule, setSlotsRule }) => {
         End time:
         <Time setTime={setEndTime} />
       </label>
+      <DaysOfWeekSelector />
     </div>
   );
 };

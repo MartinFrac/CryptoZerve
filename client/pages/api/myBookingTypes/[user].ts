@@ -16,7 +16,10 @@ export default async function handler(
     try {
       const btRef = await addDoc(collection(db, "booking_types"), req.body);
       const docObject = { ID: btRef.id };
-      const mbtRef = await addDoc(collection(db, "myBookingTypes", `${user}`, "bookingTypes"), docObject);
+      const mbtRef = await addDoc(
+        collection(db, "myBookingTypes", `${user}`, "bookingTypes"),
+        docObject
+      );
       console.log(`document added: ${btRef}`);
     } catch (error) {
       console.error("Error adding document: ", error);
@@ -49,6 +52,9 @@ export default async function handler(
         price: doc.data().price,
         venue: doc.data().venue,
         startDay: doc.data().startDay,
+        daysRule: doc.data().daysRule,
+        startSlotsRule: doc.data().startSlotsRule,
+        endSlotsRule: doc.data().endSlotsRule,
       });
     });
   } catch (e) {

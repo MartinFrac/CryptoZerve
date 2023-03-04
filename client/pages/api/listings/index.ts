@@ -1,6 +1,5 @@
 import { db } from "../../../config/firebase";
 import { collection, getDocs } from "firebase/firestore"; 
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export type Venue = {
@@ -12,6 +11,9 @@ export type Venue = {
   price: number;
   venue: string;
   startDay: number;
+  daysRule: string[];
+  startSlotsRule: number;
+  endSlotsRule: number;
 };
 
 export default async function handler(
@@ -19,7 +21,7 @@ export default async function handler(
   res: NextApiResponse<Venue[]>
 ) {
     console.log("api/listings: executed");
-    let listings:Venue[] = [];
+    let listings: Venue[] = [];
     try {
       const querySnapshot = await getDocs(collection(db, "booking_types"));
       querySnapshot.forEach((doc) => {
@@ -33,6 +35,9 @@ export default async function handler(
           price: doc.data().price,
           venue: doc.data().venue,
           startDay: doc.data().startDay,
+          daysRule: doc.data().daysRule,
+          startSlotsRule: doc.data().startSlotsRule,
+          endSlotsRule: doc.data().endSlotsRule,
         })
       });
     } catch (e) {
