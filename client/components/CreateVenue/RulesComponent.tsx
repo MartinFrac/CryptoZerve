@@ -11,7 +11,8 @@ type Props = {
     start: number[],
     end: number[],
     startDay: number,
-    startYear: number
+    startYear: number,
+    days: string[]
   ) => void;
 };
 
@@ -42,14 +43,14 @@ const SlotsConverter: React.FC<Props> = ({ setRules }) => {
       [timeStart.hour, timeStart.minute],
       [timeEnd.hour, timeEnd.minute],
       getDayOfYear(startDay),
-      startYear
+      startYear,
+      daysList
     );
     setSlotsRule(slotsRuleLocal);
-    console.log(slotsRuleLocal.toString(2));
   }, [timeStart, timeEnd]);
 
   useEffect(() => {
-    //offset days rule to fit start day i.e. 4 = Tuesday => 0000010 => 0000001
+    //TODO: account for change of the year
     let daysRuleTemplate = 0;
     if (daysList.includes("Monday")) daysRuleTemplate += 1;
     if (daysList.includes("Tuesday")) daysRuleTemplate += 2;
@@ -71,10 +72,16 @@ const SlotsConverter: React.FC<Props> = ({ setRules }) => {
     //2 ** 1, 2 ** 2
     const dayConverted = startDay.getDay() === 0 ? 6 : startDay.getDay() - 1;
     const divider = 2 ** dayConverted;
-    daysRuleLocal = daysRuleLocal.div(BigNumber.from(divider))
+    daysRuleLocal = daysRuleLocal.div(BigNumber.from(divider));
     setDaysRule(daysRuleLocal);
-    console.log(
-      `list: ${daysList}, rule: ${daysRuleLocal.toBigInt().toString(2)}`
+    setRules(
+      daysRuleLocal,
+      slotsRule,
+      [timeStart.hour, timeStart.minute],
+      [timeEnd.hour, timeEnd.minute],
+      getDayOfYear(startDay),
+      startYear,
+      daysList
     );
   }, [daysList, startDay]);
 
@@ -105,7 +112,6 @@ const SlotsConverter: React.FC<Props> = ({ setRules }) => {
     const dayOfTheYear = getDayOfYear(day);
     setStartYear(day.getFullYear());
     setStartDay(day);
-    console.log(dayOfTheYear);
   };
 
   return (

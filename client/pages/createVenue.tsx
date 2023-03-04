@@ -29,7 +29,7 @@ const createVenue: NextPage = () => {
     endMinute: 0,
   });
   const [slotsRule, setSlotsRule] = useState<number>(0);
-  const [daysRule, setDaysRule] = useState<number>(0);
+  const [daysRule, setDaysRule] = useState<BigNumber>(BigNumber.from(0));
   useEffect(() => {
     console.log(venueObject);
   }, [venueObject]);
@@ -40,11 +40,26 @@ const createVenue: NextPage = () => {
     start: number[],
     end: number[],
     startDay: number,
-    startYear: number
-  ) => {};
+    startYear: number,
+    days: string[]
+  ) => {
+    setDaysRule(daysRule);
+    setSlotsRule(slotsRule);
+    setVenueObject((prev) => ({
+      ...prev,
+      startHour: start[0],
+      startMinute: start[1],
+      endHour: end[0],
+      endMinute: end[1],
+      daysRule: days,
+      startDay: startDay,
+      startYear: startYear,
+    }));
+  };
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    console.log(`create venue: slots rule: ${slotsRule}, days rule: ${daysRule.toBigInt().toString(2)}`);
     if (user === null) {
       alert("Your wallet is not connected");
       return;
