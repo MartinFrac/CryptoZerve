@@ -33,7 +33,7 @@ const createVenue: NextPage = () => {
     console.log(venueObject);
   }, [venueObject]);
 
-  const setRules = (daysRule: number, slotsRule: number) => {};
+  const setRules = (daysRule: number, slotsRule: number, start: number[], end: number[]) => {};
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();

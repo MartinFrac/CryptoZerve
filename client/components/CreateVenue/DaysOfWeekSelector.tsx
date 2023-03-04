@@ -1,6 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from "react";
 
-const WeekdaySelector = () => {
+type Props = {
+  setDays: (days: string[]) => void;
+};
+
+const WeekdaySelector: React.FC<Props> = ({ setDays }) => {
   const [selectedDays, setSelectedDays] = useState<string[]>([]);
 
   const handleDaySelect = (day: string) => {
@@ -11,6 +15,10 @@ const WeekdaySelector = () => {
     }
   };
 
+  useEffect(() => {
+    setDays(selectedDays);
+  }, [selectedDays]);
+
   return (
     <div>
       <ul>
@@ -19,8 +27,8 @@ const WeekdaySelector = () => {
             <input
               type="checkbox"
               value="Monday"
-              checked={selectedDays.includes('Monday')}
-              onChange={() => handleDaySelect('Monday')}
+              checked={selectedDays.includes("Monday")}
+              onChange={() => handleDaySelect("Monday")}
             />
             Monday
           </label>
@@ -30,8 +38,8 @@ const WeekdaySelector = () => {
             <input
               type="checkbox"
               value="Tuesday"
-              checked={selectedDays.includes('Tuesday')}
-              onChange={() => handleDaySelect('Tuesday')}
+              checked={selectedDays.includes("Tuesday")}
+              onChange={() => handleDaySelect("Tuesday")}
             />
             Tuesday
           </label>
@@ -41,8 +49,8 @@ const WeekdaySelector = () => {
             <input
               type="checkbox"
               value="Wednesday"
-              checked={selectedDays.includes('Wednesday')}
-              onChange={() => handleDaySelect('Wednesday')}
+              checked={selectedDays.includes("Wednesday")}
+              onChange={() => handleDaySelect("Wednesday")}
             />
             Wednesday
           </label>
@@ -52,8 +60,8 @@ const WeekdaySelector = () => {
             <input
               type="checkbox"
               value="Thursday"
-              checked={selectedDays.includes('Thursday')}
-              onChange={() => handleDaySelect('Thursday')}
+              checked={selectedDays.includes("Thursday")}
+              onChange={() => handleDaySelect("Thursday")}
             />
             Thursday
           </label>
@@ -63,8 +71,8 @@ const WeekdaySelector = () => {
             <input
               type="checkbox"
               value="Friday"
-              checked={selectedDays.includes('Friday')}
-              onChange={() => handleDaySelect('Friday')}
+              checked={selectedDays.includes("Friday")}
+              onChange={() => handleDaySelect("Friday")}
             />
             Friday
           </label>
@@ -74,8 +82,8 @@ const WeekdaySelector = () => {
             <input
               type="checkbox"
               value="Saturday"
-              checked={selectedDays.includes('Saturday')}
-              onChange={() => handleDaySelect('Saturday')}
+              checked={selectedDays.includes("Saturday")}
+              onChange={() => handleDaySelect("Saturday")}
             />
             Saturday
           </label>
@@ -85,8 +93,8 @@ const WeekdaySelector = () => {
             <input
               type="checkbox"
               value="Sunday"
-              checked={selectedDays.includes('Sunday')}
-              onChange={() => handleDaySelect('Sunday')}
+              checked={selectedDays.includes("Sunday")}
+              onChange={() => handleDaySelect("Sunday")}
             />
             Sunday
           </label>
