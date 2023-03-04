@@ -9,7 +9,6 @@ type Props = {
 const Inputs: React.FC<Props> = ({ venueObject, setVenueObject }) => {
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
-  const [startDay, setStartDay] = useState("");
   const [venue, setVenue] = useState("");
 
   const setNameHandler = (value: string) => {
@@ -30,13 +29,6 @@ const Inputs: React.FC<Props> = ({ venueObject, setVenueObject }) => {
     setVenueObject((prev) => ({
       ...prev,
       price: parseInt(value),
-    }));
-  };
-
-  const setStartDayHandler = (value: string) => {
-    setVenueObject((prev) => ({
-      ...prev,
-      startDay: parseInt(value),
     }));
   };
 
@@ -86,21 +78,6 @@ const Inputs: React.FC<Props> = ({ venueObject, setVenueObject }) => {
           id="price"
           value={venueObject.price}
           onChange={(event) => setPriceHandler(event.target.value)}
-        />
-      </div>
-      <div className="px-6 py-4">
-        <label
-          className="block font-bold text-gray-700 mb-2"
-          htmlFor="startDay"
-        >
-          Start Day:
-        </label>
-        <input
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          type="number"
-          id="startDay"
-          value={venueObject.startDay}
-          onChange={(event) => setStartDayHandler(event.target.value)}
         />
       </div>
       <div className="px-6 py-4">
