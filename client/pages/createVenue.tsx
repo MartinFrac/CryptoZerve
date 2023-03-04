@@ -13,27 +13,27 @@ const createVenue: NextPage = () => {
   const user = mmContext.account;
   const provider = mmContext.provider;
   const [venueObject, setVenueObject] = useState<Venue>({
-        id: "",
-        address: "",
-        owner: "",
-        name: "",
-        description: "",
-        price: 0,
-        venue: "",
-        startDay: 0,
-        daysRule: [],
-        startSlotsRule: 0,
-        endSlotsRule: 0,
+    id: "",
+    address: "",
+    owner: "",
+    name: "",
+    description: "",
+    price: 0,
+    venue: "",
+    startDay: 0,
+    daysRule: [],
+    startHour: 0,
+    endHour: 0,
+    startMinute: 0,
+    endMinute: 0,
   });
   const [slotsRule, setSlotsRule] = useState<number>(0);
   const [daysRule, setDaysRule] = useState<number>(0);
   useEffect(() => {
-    console.log(venueObject)
-  }, [venueObject])
+    console.log(venueObject);
+  }, [venueObject]);
 
-  const setRules = (daysRule: number, slotsRule: number) => {
-
-  }
+  const setRules = (daysRule: number, slotsRule: number) => {};
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -79,8 +79,8 @@ const createVenue: NextPage = () => {
       className="max-w-md mx-auto mt-8 bg-white rounded-lg overflow-hidden shadow-md"
     >
       <div className="flex flex-row">
-        <Inputs venueObject={venueObject} setVenueObject={setVenueObject}/>
-        <RulesComponent setRules={setRules}/>
+        <Inputs venueObject={venueObject} setVenueObject={setVenueObject} />
+        <RulesComponent setRules={setRules} />
       </div>
     </form>
   );

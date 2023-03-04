@@ -12,8 +12,10 @@ export type Venue = {
   venue: string;
   startDay: number;
   daysRule: string[];
-  startSlotsRule: number;
-  endSlotsRule: number;
+  startHour: number;
+  endHour: number;
+  startMinute: number;
+  endMinute: number;
 };
 
 export default async function handler(
@@ -36,8 +38,10 @@ export default async function handler(
           venue: doc.data().venue,
           startDay: doc.data().startDay,
           daysRule: doc.data().daysRule,
-          startSlotsRule: doc.data().startSlotsRule,
-          endSlotsRule: doc.data().endSlotsRule,
+          startHour: doc.data().startHour,
+          endHour: doc.data().endHour,
+          startMinute: doc.data().startMinute,
+          endMinute: doc.data().endMinute,
         })
       });
     } catch (e) {
