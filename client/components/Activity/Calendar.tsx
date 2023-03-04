@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useFiltersContext } from "../../context/FiltersContext";
 
 type CalendarProps = {
   year?: number;
@@ -55,6 +54,7 @@ const Calendar: React.FC<CalendarProps> = ({
         <button
           className="bg-black text-white px-2 py-2 rounded"
           onClick={handlePrevMonthClick}
+          type="button"
         >
           Prev
         </button>
@@ -64,6 +64,7 @@ const Calendar: React.FC<CalendarProps> = ({
         <button
           className="bg-black text-white px-2 py-2 rounded"
           onClick={handleNextMonthClick}
+          type="button"
         >
           Next
         </button>

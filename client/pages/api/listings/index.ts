@@ -11,6 +11,7 @@ export type Venue = {
   price: number;
   venue: string;
   startDay: number;
+  startYear: number;
   daysRule: string[];
   startHour: number;
   endHour: number;
@@ -37,6 +38,7 @@ export default async function handler(
           price: doc.data().price,
           venue: doc.data().venue,
           startDay: doc.data().startDay,
+          startYear: doc.data().startYear,
           daysRule: doc.data().daysRule,
           startHour: doc.data().startHour,
           endHour: doc.data().endHour,

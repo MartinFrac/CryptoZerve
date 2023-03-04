@@ -21,6 +21,7 @@ const createVenue: NextPage = () => {
     price: 0,
     venue: "",
     startDay: 0,
+    startYear: new Date().getFullYear(),
     daysRule: [],
     startHour: 0,
     endHour: 0,
@@ -33,10 +34,21 @@ const createVenue: NextPage = () => {
     console.log(venueObject);
   }, [venueObject]);
 
-  const setRules = (daysRule: BigNumber, slotsRule: number, start: number[], end: number[]) => {};
+  const setRules = (
+    daysRule: BigNumber,
+    slotsRule: number,
+    start: number[],
+    end: number[],
+    startDay: number,
+    startYear: number
+  ) => {};
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    if (user === null) {
+      alert("Your wallet is not connected");
+      return;
+    }
     const currentYear = new Date().getFullYear;
     const numberOfSlots = 0;
     const signer = provider.getSigner();
@@ -76,11 +88,19 @@ const createVenue: NextPage = () => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="max-w-md mx-auto mt-8 bg-white rounded-lg overflow-hidden shadow-md"
+      className="max-w-xl mx-auto mt-8 bg-white rounded-lg overflow-hidden shadow-md"
     >
-      <div className="flex flex-row">
-        <Inputs venueObject={venueObject} setVenueObject={setVenueObject} />
-        <RulesComponent setRules={setRules} />
+      <div>
+        <div className="flex flex-row p-2">
+          <Inputs venueObject={venueObject} setVenueObject={setVenueObject} />
+          <RulesComponent setRules={setRules} />
+        </div>
+        <button
+          type="submit"
+          className="text-center w-full p-4 bg-black text-white"
+        >
+          Submit
+        </button>
       </div>
     </form>
   );

@@ -29,7 +29,7 @@ const Listing: React.FC<Props> = (props) => {
 
   const request = async () => {
     if (user === null) {
-      alert("Provider not injected");
+      alert("Your wallet is not connected");
       return;
     }
     const signer = provider.getSigner();
