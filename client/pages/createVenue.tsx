@@ -19,6 +19,7 @@ const createVenue: NextPage = () => {
     name: "",
     description: "",
     price: 0,
+    topUp: 0,
     units: 0,
     venue: "",
     startDay: 0,
@@ -83,7 +84,7 @@ const createVenue: NextPage = () => {
       slotsRule,
       venueObject.units,
       venueObject.price,
-      { value: 20_000 }
+      { value: venueObject.topUp }
     );
     console.log(contract.address);
     await contract.deployTransaction.wait();
@@ -95,13 +96,20 @@ const createVenue: NextPage = () => {
       },
       body: JSON.stringify({
         address: contract.address,
+        owner: user,
         description: venueObject.description,
         name: venueObject.name,
-        owner: user,
         price: venueObject.price,
+        topUp: venueObject.topUp,
+        units: venueObject.units,
         startDay: venueObject.startDay,
+        startYear: venueObject.startYear,
         venue: venueObject.venue,
-        year: currentYear,
+        daysRule: venueObject.daysRule,
+        startHour: venueObject.startHour,
+        endHour: venueObject.endHour,
+        startMinute: venueObject.startMinute,
+        endMinute: venueObject.endMinute,
       }),
     });
   };

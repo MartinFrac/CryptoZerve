@@ -1,5 +1,5 @@
 import { db } from "../../../config/firebase";
-import { addDoc, collection, doc, getDoc, getDocs } from "firebase/firestore";
+import { addDoc, collection, getDocs } from "firebase/firestore";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { Venue } from "../listings";
 
@@ -50,8 +50,11 @@ export default async function handler(
         name: doc.data().name,
         description: doc.data().description,
         price: doc.data().price,
+        topUp: doc.data().topUp,
         venue: doc.data().venue,
+        units: doc.data().units,
         startDay: doc.data().startDay,
+        startYear: doc.data().startYear,
         daysRule: doc.data().daysRule,
         startHour: doc.data().startHour,
         endHour: doc.data().endHour,

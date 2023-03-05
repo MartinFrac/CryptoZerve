@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Venue } from "../../pages/api/listings";
 
 type Props = {
@@ -7,10 +7,6 @@ type Props = {
 };
 
 const Inputs: React.FC<Props> = ({ venueObject, setVenueObject }) => {
-  const [description, setDescription] = useState("");
-  const [price, setPrice] = useState("");
-  const [venue, setVenue] = useState("");
-
   const setNameHandler = (value: string) => {
     setVenueObject((prev) => ({
       ...prev,
@@ -29,6 +25,13 @@ const Inputs: React.FC<Props> = ({ venueObject, setVenueObject }) => {
     setVenueObject((prev) => ({
       ...prev,
       price: parseInt(value),
+    }));
+  };
+
+  const setTopUpHandler = (value: string) => {
+    setVenueObject((prev) => ({
+      ...prev,
+      topUp: parseInt(value),
     }));
   };
 
@@ -78,6 +81,18 @@ const Inputs: React.FC<Props> = ({ venueObject, setVenueObject }) => {
           id="price"
           value={venueObject.price}
           onChange={(event) => setPriceHandler(event.target.value)}
+        />
+      </div>
+      <div className="px-6 py-4">
+        <label className="block font-bold text-gray-700 mb-2" htmlFor="price">
+          Top Up Value
+        </label>
+        <input
+          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          type="number"
+          id="price"
+          value={venueObject.topUp}
+          onChange={(event) => setTopUpHandler(event.target.value)}
         />
       </div>
       <div className="px-6 py-4">

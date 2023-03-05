@@ -9,6 +9,7 @@ export type Venue = {
   name: string;
   description: string;
   price: number;
+  topUp: number;
   units: number;
   venue: string;
   startDay: number;
@@ -37,6 +38,7 @@ export default async function handler(
         name: doc.data().name,
         description: doc.data().description,
         price: doc.data().price,
+        topUp: doc.data().topUp,
         units: doc.data().price,
         venue: doc.data().venue,
         startDay: doc.data().startDay,

@@ -30,6 +30,7 @@ contract VenueSlots {
   //day and half hour slot to number of units available (counter of units available). i.e. 24/30. Schema: day + slot = 3 + 24 (third day, 24th slot)
 
   //=====GETTERS=====
+  //TODO: add rules getters
 
   function getNOPayedSlots() external view onlyOwner returns(uint256) {
     return _payedSlots;
