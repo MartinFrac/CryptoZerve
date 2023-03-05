@@ -20,16 +20,6 @@ export default async function handler(
   res: NextApiResponse<MyBookingData[]>
 ) {
   console.log("api/mybookings: executed");
-  if (req.method === "POST") {
-    try {
-      const docRef = await addDoc(collection(db, "myBookings"), req.body);
-      console.log(`document added: ${docRef}`)
-    } catch (error) {
-      console.error("Error adding document: ", error);
-      return res.status(204);
-    }
-    return res.status(200);
-  }
 
   let bookings: MyBookingData[] = [];
   try {

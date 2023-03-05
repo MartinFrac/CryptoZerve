@@ -19,11 +19,13 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<MyBookingData[]>
 ) {
-  //TODO: update to search by user 
-  console.log("api/mybookings: executed");
+  console.log("api/bookings/user: executed");
+  const { query } = req;
+  const { user } = query;
+  if (user === undefined) return;
   if (req.method === "POST") {
     try {
-      const docRef = await addDoc(collection(db, "myBookings"), req.body);
+      const docRef = await addDoc(collection(db, "myBookings", user.toString(), "bookings"), req.body);
       console.log(`document added: ${docRef}`)
     } catch (error) {
       console.error("Error adding document: ", error);
@@ -34,7 +36,7 @@ export default async function handler(
 
   let bookings: MyBookingData[] = [];
   try {
-    const querySnapshot = await getDocs(collection(db, "myBookings"));
+    const querySnapshot = await getDocs(collection(db, "myBookings", user.toString(), "bookings"));
     querySnapshot.forEach((doc) => {
       console.log(`${doc.id} => ${JSON.stringify(doc.data())}`);
       bookings.push({

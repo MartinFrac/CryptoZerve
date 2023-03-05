@@ -67,7 +67,7 @@ const Listing: React.FC<Props> = (props) => {
       );
       console.log(response);
 
-      fetch("/api/myBookings", {
+      fetch(`/api/bookings/${user}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
