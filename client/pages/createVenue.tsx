@@ -19,6 +19,7 @@ const createVenue: NextPage = () => {
     name: "",
     description: "",
     price: 0,
+    units: 0,
     venue: "",
     startDay: 0,
     startYear: new Date().getFullYear(),
@@ -41,12 +42,14 @@ const createVenue: NextPage = () => {
     end: number[],
     startDay: number,
     startYear: number,
-    days: string[]
+    days: string[],
+    units: number
   ) => {
     setDaysRule(daysRule);
     setSlotsRule(slotsRule);
     setVenueObject((prev) => ({
       ...prev,
+      units: units,
       startHour: start[0],
       startMinute: start[1],
       endHour: end[0],
@@ -59,13 +62,16 @@ const createVenue: NextPage = () => {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    console.log(`create venue: slots rule: ${slotsRule}, days rule: ${daysRule.toBigInt().toString(2)}`);
+    console.log(
+      `create venue: slots rule: ${slotsRule}, days rule: ${daysRule
+        .toBigInt()
+        .toString(2)}`
+    );
     if (user === null) {
       alert("Your wallet is not connected");
       return;
     }
-    const currentYear = new Date().getFullYear;
-    const numberOfSlots = 0;
+    const currentYear = new Date().getFullYear();
     const signer = provider.getSigner();
     const factory = new ContractFactory(VENUE_ABI, VENUE_BYTECODE, signer);
     const contract = await factory.deploy(
@@ -73,9 +79,9 @@ const createVenue: NextPage = () => {
       venueObject.venue,
       venueObject.startDay,
       currentYear,
-      0b110011,
-      0b111100001111,
-      numberOfSlots,
+      daysRule.toBigInt(),
+      slotsRule,
+      venueObject.units,
       venueObject.price,
       { value: 20_000 }
     );

@@ -3,6 +3,7 @@ import Time from "../Activity/Time";
 import DaysOfWeekSelector from "./DaysOfWeekSelector";
 import { BigNumber } from "ethers";
 import Calendar from "../Activity/Calendar";
+import Units from "../Activity/Units";
 
 type Props = {
   setRules: (
@@ -12,7 +13,8 @@ type Props = {
     end: number[],
     startDay: number,
     startYear: number,
-    days: string[]
+    days: string[],
+    units: number,
   ) => void;
 };
 
@@ -29,6 +31,7 @@ const SlotsConverter: React.FC<Props> = ({ setRules }) => {
   const [daysRule, setDaysRule] = useState<BigNumber>(BigNumber.from(0));
   const [startDay, setStartDay] = useState<Date>(new Date());
   const [startYear, setStartYear] = useState<number>(new Date().getFullYear());
+  const [units, setUnits] = useState<number>(0);
 
   useEffect(() => {
     let slotsRuleLocal = 0;
@@ -44,7 +47,8 @@ const SlotsConverter: React.FC<Props> = ({ setRules }) => {
       [timeEnd.hour, timeEnd.minute],
       getDayOfYear(startDay),
       startYear,
-      daysList
+      daysList,
+      units,
     );
     setSlotsRule(slotsRuleLocal);
   }, [timeStart, timeEnd]);
@@ -81,7 +85,8 @@ const SlotsConverter: React.FC<Props> = ({ setRules }) => {
       [timeEnd.hour, timeEnd.minute],
       getDayOfYear(startDay),
       startYear,
-      daysList
+      daysList,
+      units
     );
   }, [daysList, startDay]);
 
@@ -108,8 +113,11 @@ const SlotsConverter: React.FC<Props> = ({ setRules }) => {
     setDaysList(daysList);
   };
 
+  const setUnitsLocal = (units: number) => {
+    setUnits(units);
+  }
+
   const setStartDate = (day: Date) => {
-    const dayOfTheYear = getDayOfYear(day);
     setStartYear(day.getFullYear());
     setStartDay(day);
   };
@@ -119,6 +127,7 @@ const SlotsConverter: React.FC<Props> = ({ setRules }) => {
       <Calendar onSetDate={setStartDate} />
       <div className="flex flex-row gap-6">
         <div className="flex flex-col gap-4 justify-evenly">
+          <Units onSetUnits={setUnitsLocal} />
           <label>
             Start time:
             <Time setTime={setStartTime} />
