@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useMMContext } from "../context/MetamaskContext";
 import { NextPage } from "next";
-import { VenueBookingData } from "./api/bookings/venue/[address]";
+import { VenueBookingData } from "./api/bookings/venue/[venueID]";
 import VenueBooking from "../components/VenueBooking";
 import { useRouter } from "next/router";
 

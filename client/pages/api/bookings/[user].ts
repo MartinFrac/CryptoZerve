@@ -25,8 +25,16 @@ export default async function handler(
   if (user === undefined) return;
   if (req.method === "POST") {
     try {
-      const docRef = await addDoc(collection(db, "myBookings", user.toString(), "bookings"), req.body);
-      console.log(`document added: ${docRef}`)
+      const docRef = await addDoc(
+        collection(db, "myBookings", user.toString(), "bookings"),
+        req.body
+      );
+      const { pin, ...cutObject } = req.body;
+      const docRef2 = await addDoc(
+        collection(db, "venueBookings", req.body.bookingTypeID, "bookings"),
+        cutObject
+      );
+      console.log(`documents added: ${docRef}, ${docRef2}`);
     } catch (error) {
       console.error("Error adding document: ", error);
       return res.status(204);
@@ -36,7 +44,9 @@ export default async function handler(
 
   let bookings: MyBookingData[] = [];
   try {
-    const querySnapshot = await getDocs(collection(db, "myBookings", user.toString(), "bookings"));
+    const querySnapshot = await getDocs(
+      collection(db, "myBookings", user.toString(), "bookings")
+    );
     querySnapshot.forEach((doc) => {
       console.log(`${doc.id} => ${JSON.stringify(doc.data())}`);
       bookings.push({

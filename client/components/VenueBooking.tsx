@@ -3,7 +3,7 @@ import { MyBookingData } from "../pages/api/bookings/[user]";
 import { useMMContext } from "../context/MetamaskContext";
 import VENUE_ABI from "../abi/VenueSlots.json";
 import { ethers } from "ethers";
-import { VenueBookingData } from "../pages/api/bookings/venue/[address]";
+import { VenueBookingData } from "../pages/api/bookings/venue/[venueID]";
 import { Venue } from "../pages/api/listings";
 
 type Props = {
@@ -28,34 +28,39 @@ const VenueBooking: React.FC<Props> = (props) => {
     return dayOfYear;
   };
 
-  const getVenue = (bookingTypeID: string) => {
-    fetch(`/api/listings/${bookingTypeID}`)
-      .then((res) => res.json())
-      .then((data) => {
-        return data as Venue;
-      });
-    return {} as Venue;
+  const getVenue = async (bookingTypeID: string): Promise<Venue> => {
+    try {
+      const res = await fetch(`/api/listings/${bookingTypeID}`);
+      const data = await res.json();
+      return data as Venue;
+    } catch (err) {
+      return {} as Venue;
+    }
   };
 
-  const cancel = async () => {
+  const confirm = async () => {
     if (user === null) {
       alert("Provider not injected");
       return;
     }
-    const signer = provider.getSigner();
-    const VenueContract = new ethers.Contract(
-      props.details.id,
-      VENUE_ABI,
-      provider
-    );
     try {
-      const bookingType = getVenue(props.details.bookingTypeID);
+      const bookingType = await getVenue(props.details.bookingTypeID);
+      const signer = provider.getSigner();
+      const VenueContract = new ethers.Contract(
+        bookingType.address,
+        VENUE_ABI,
+        provider
+      );
+      console.log(bookingType);
       const pin = pinInput;
       const dayOfTheYear = getDayOfYear(new Date());
       const day = dayOfTheYear - bookingType.startDay + 1;
-      const addressEnd = addressEndInput;
+      const addressEnd = parseInt(addressEndInput, 16);
       const VenueContractWithSigner = VenueContract.connect(signer);
-      const response = await VenueContractWithSigner.cofirmAttendance(
+      console.log(day)
+      console.log(addressEnd)
+      console.log(pin)
+      const response = await VenueContractWithSigner.confirmAttendance(
         day,
         addressEnd,
         pin
@@ -80,19 +85,19 @@ const VenueBooking: React.FC<Props> = (props) => {
       <input
         className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         type="number"
-        id="price"
+        id="pin"
         value={pinInput}
         onChange={(event) => setPinInput(parseInt(event.target.value))}
       />
       <input
         className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        type="number"
-        id="price"
+        type="string"
+        id="addressEnd"
         value={addressEndInput}
         onChange={(event) => setAddressEndInput(event.target.value)}
       />
       <button
-        onClick={() => cancel()}
+        onClick={() => confirm()}
         className="bg-white max-w-md px-2 py-2 mt-2 text-black"
       >
         Confirm
