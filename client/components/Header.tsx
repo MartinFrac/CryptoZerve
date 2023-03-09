@@ -23,7 +23,7 @@ const Header = () => {
         <Link href="/createVenue">
           <div className={styles}>List your venue</div>
         </Link>
-        <Link href="/myBookingTypes">
+        <Link href="/myVenues">
           <div className={styles}>My Venues</div>
         </Link>
         {mmContext.account ? (
