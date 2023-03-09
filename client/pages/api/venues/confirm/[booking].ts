@@ -8,16 +8,16 @@ export default async function handler(
 ) {
   console.log("api/myBookingTypes: executed");
   const { query } = req;
-  const { user } = query;
+  const { booking } = query;
 
   try {
-    const btRef = await addDoc(collection(db, "booking_types"), req.body);
-    const docObject = { ID: btRef.id };
-    const mbtRef = await addDoc(
-      collection(db, "myBookingTypes", `${user}`, "bookingTypes"),
+    const bookingTypeRef = await addDoc(collection(db, "booking_types"), req.body);
+    const docObject = { ID: bookingTypeRef.id };
+    const myBookingTypeRef = await addDoc(
+      collection(db, "myBookingTypes", `${booking}`, "bookingTypes"),
       docObject
     );
-    console.log(`document added: ${btRef}`);
+    console.log(`documents added: ${bookingTypeRef}, ${myBookingTypeRef}`);
   } catch (error) {
     console.error("Error adding document: ", error);
     return res.status(204);

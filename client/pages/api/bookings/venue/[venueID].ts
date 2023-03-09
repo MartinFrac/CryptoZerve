@@ -20,9 +20,8 @@ export default async function handler(
 ) {
   const { query } = req;
   const { venueID } = query;
-  console.log(`api/bookings/venue/${venueID}: executed`);
   if (venueID === undefined) return;
-
+  console.log(`api/bookings/venue/${venueID}: executed`);
   if (req.method === "POST") {
     try {
       const docRef = await addDoc(collection(db, "venueBookings", venueID.toString(), "bookings"), req.body);

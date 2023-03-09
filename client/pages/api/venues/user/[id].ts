@@ -1,26 +1,26 @@
-import { db } from "../../../config/firebase";
+import { db } from "../../../../config/firebase";
 import { addDoc, collection, getDocs } from "firebase/firestore";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { Venue } from "../listings";
+import { VenueData } from "./../index";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Venue[]>
+  res: NextApiResponse<VenueData[]>
 ) {
   console.log("api/myBookingTypes: executed");
   const { query } = req;
-  const { user } = query;
-  let bookings: Venue[] = [];
+  const { id } = query;
+  let bookings: VenueData[] = [];
 
   if (req.method === "POST") {
     try {
-      const btRef = await addDoc(collection(db, "booking_types"), req.body);
-      const docObject = { ID: btRef.id };
-      const mbtRef = await addDoc(
-        collection(db, "myBookingTypes", `${user}`, "bookingTypes"),
+      const bookingTypeRef = await addDoc(collection(db, "booking_types"), req.body);
+      const docObject = { ID: bookingTypeRef.id };
+      const myBookingTypeRef = await addDoc(
+        collection(db, "myBookingTypes", `${id}`, "bookingTypes"),
         docObject
       );
-      console.log(`document added: ${btRef}`);
+      console.log(`documents added: ${bookingTypeRef}, ${myBookingTypeRef}`);
     } catch (error) {
       console.error("Error adding document: ", error);
       return res.status(204);

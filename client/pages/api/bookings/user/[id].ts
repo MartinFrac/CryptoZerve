@@ -1,40 +1,28 @@
-import { db } from "../../../config/firebase";
+import { db } from "../../../../config/firebase";
 import { addDoc, collection, getDocs } from "firebase/firestore";
 import type { NextApiRequest, NextApiResponse } from "next";
-
-export type MyBookingData = {
-  id: string;
-  bookingTypeID: string;
-  day: string;
-  hourEnd: number;
-  hourStart: number;
-  minuteEnd: number;
-  minuteStart: number;
-  name: string;
-  pin: number;
-  units: number;
-};
+import { MyBookingData } from "../.";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<MyBookingData[]>
 ) {
-  console.log("api/bookings/user: executed");
   const { query } = req;
-  const { user } = query;
-  if (user === undefined) return;
+  const { id } = query;
+  if (id === undefined) return;
+  console.log(`api/bookings/${id}: executed`);
   if (req.method === "POST") {
     try {
-      const docRef = await addDoc(
-        collection(db, "myBookings", user.toString(), "bookings"),
+      const myBookingsRef = await addDoc(
+        collection(db, "myBookings", id.toString(), "bookings"),
         req.body
       );
       const { pin, ...cutObject } = req.body;
-      const docRef2 = await addDoc(
+      const venueBookingsRef = await addDoc(
         collection(db, "venueBookings", req.body.bookingTypeID, "bookings"),
         cutObject
       );
-      console.log(`documents added: ${docRef}, ${docRef2}`);
+      console.log(`documents added: ${myBookingsRef}, ${venueBookingsRef}`);
     } catch (error) {
       console.error("Error adding document: ", error);
       return res.status(204);
@@ -45,7 +33,7 @@ export default async function handler(
   let bookings: MyBookingData[] = [];
   try {
     const querySnapshot = await getDocs(
-      collection(db, "myBookings", user.toString(), "bookings")
+      collection(db, "myBookings", id.toString(), "bookings")
     );
     querySnapshot.forEach((doc) => {
       console.log(`${doc.id} => ${JSON.stringify(doc.data())}`);

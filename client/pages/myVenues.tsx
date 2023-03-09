@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useMMContext } from "../context/MetamaskContext";
-import { Venue } from "./api/listings";
+import { VenueData } from "./api/venues";
 import MyVenue from "../components/MyVenue";
 import { NextPage } from "next";
 
 const myBookingTypes: NextPage = () => {
   const mmContext = useMMContext();
   const user = mmContext.account;
-  const [myBookingTypesList, setMyBookingTypesList] = useState<Venue[]>([]);
+  const [myBookingTypesList, setMyBookingTypesList] = useState<VenueData[]>([]);
 
   useEffect(() => {
-    fetch(`/api/myBookingTypes/${user}`)
+    fetch(`/api/venues/user/${user}`)
       .then((res) => res.json())
       .then((data) => {
         setMyBookingTypesList(data);

@@ -1,16 +1,16 @@
 import type { NextPage } from "next";
 import { useEffect, useState } from "react";
 import Listing from "../components/Listing";
-import { Venue } from "./api/listings";
+import { VenueData } from "./api/venues";
 import { useFiltersContext } from "../context/FiltersContext";
 
 const Listings: NextPage = () => {
-  const [listings, setListings] = useState<Venue[]>([]);
+  const [listings, setListings] = useState<VenueData[]>([]);
   const filtersContext = useFiltersContext();
 
   useEffect(() => {
     console.log(filtersContext.filters)
-    fetch(`/api/listings/${filtersContext.filters.name}`)
+    fetch(`/api/venues/`)
       .then((res) => res.json())
       .then((data) => {
         setListings(data);

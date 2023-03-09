@@ -1,11 +1,11 @@
 import { db } from "../../../config/firebase";
-import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { Venue } from ".";
+import { VenueData } from ".";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Venue>
+  res: NextApiResponse<VenueData>
 ) {
   const { query } = req;
   const { id } = query;

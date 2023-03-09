@@ -1,9 +1,9 @@
 import React from "react";
-import { Venue } from "../pages/api/listings";
+import { VenueData } from "../pages/api/venues";
 import Link from "next/link";
 
 type Props = {
-  details: Venue;
+  details: VenueData;
 };
 
 const MyVenue: React.FC<Props> = (props) => {

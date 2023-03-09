@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useMMContext } from "../context/MetamaskContext";
-import { MyBookingData } from "./api/bookings/[user]";
+import { MyBookingData } from "./api/bookings";
 import MyBooking from "../components/MyBooking";
 import { NextPage } from "next";
 
@@ -14,7 +14,7 @@ const myBookings: NextPage = () => {
       alert("Your wallet is not connected");
       return;
     }
-    fetch(`/api/bookings/${user}`)
+    fetch(`/api/bookings/user/${user}`)
       .then((res) => res.json())
       .then((data) => {
         setMyBookingsList(data);

@@ -5,14 +5,14 @@ import { BigNumber, ContractFactory } from "ethers";
 import VENUE_ABI from "../abi/VenueSlots.json";
 import VENUE_BYTECODE from "../bytecode/VenueSlots.json";
 import Inputs from "../components/CreateVenue/Inputs";
-import { Venue } from "./api/listings";
+import { VenueData } from "./api/venues";
 import RulesComponent from "../components/CreateVenue/RulesComponent";
 
 const createVenue: NextPage = () => {
   const mmContext = useMMContext();
   const user = mmContext.account;
   const provider = mmContext.provider;
-  const [venueObject, setVenueObject] = useState<Venue>({
+  const [venueObject, setVenueObject] = useState<VenueData>({
     id: "",
     address: "",
     owner: "",
@@ -89,7 +89,7 @@ const createVenue: NextPage = () => {
     console.log(contract.address);
     await contract.deployTransaction.wait();
 
-    fetch(`/api/myBookingTypes/${user}`, {
+    fetch(`/api/venues/user/${user}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

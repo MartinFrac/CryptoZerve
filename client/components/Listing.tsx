@@ -1,12 +1,12 @@
 import React from "react";
-import {Venue } from "../pages/api/listings";
+import { VenueData } from "../pages/api/venues";
 import VENUE_ABI from "../abi/VenueSlots.json";
 import { useMMContext } from "../context/MetamaskContext";
 import { ethers } from "ethers";
 import { useFiltersContext } from "../context/FiltersContext";
 
 type Props = {
-  details: Venue;
+  details: VenueData;
 };
 
 const Listing: React.FC<Props> = (props) => {
@@ -48,7 +48,6 @@ const Listing: React.FC<Props> = (props) => {
       const slotsEnd = filters.hourEnd * 2 + convertMinutesEnd;
       const nOSlots = slotsEnd - slotsStart + 1;
       const cost = props.details.price * filters.units * nOSlots;
-
       console.log(filters);
       console.log(
         `pin: ${pin}, day: ${day}, ss:${slotsStart}, se: ${slotsEnd}, cost: ${cost}`
@@ -66,8 +65,7 @@ const Listing: React.FC<Props> = (props) => {
         }
       );
       console.log(response);
-
-      fetch(`/api/bookings/${user}`, {
+      fetch(`/api/bookings/user/${user}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

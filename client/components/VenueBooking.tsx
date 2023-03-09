@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import { MyBookingData } from "../pages/api/bookings/[user]";
 import { useMMContext } from "../context/MetamaskContext";
 import VENUE_ABI from "../abi/VenueSlots.json";
 import { ethers } from "ethers";
 import { VenueBookingData } from "../pages/api/bookings/venue/[venueID]";
-import { Venue } from "../pages/api/listings";
+import { VenueData } from "../pages/api/venues";
 
 type Props = {
   details: VenueBookingData;
@@ -28,13 +27,13 @@ const VenueBooking: React.FC<Props> = (props) => {
     return dayOfYear;
   };
 
-  const getVenue = async (bookingTypeID: string): Promise<Venue> => {
+  const getVenue = async (bookingTypeID: string): Promise<VenueData> => {
     try {
-      const res = await fetch(`/api/listings/${bookingTypeID}`);
+      const res = await fetch(`/api/venues/${bookingTypeID}`);
       const data = await res.json();
-      return data as Venue;
+      return data as VenueData;
     } catch (err) {
-      return {} as Venue;
+      return {} as VenueData;
     }
   };
 
