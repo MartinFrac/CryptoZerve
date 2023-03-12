@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Link from "next/link";
 import { useFiltersContext } from "../context/FiltersContext";
 import Time from "./Activity/Time";
@@ -6,7 +6,6 @@ import Units from "./Activity/Units";
 import Calendar from "./Activity/Calendar";
 
 const Activity = () => {
-  const [name, setName] = useState<string>("");
   const filtersContext = useFiltersContext();
   const setFilters = filtersContext.setFilters;
   const filters = filtersContext.filters;
@@ -14,6 +13,14 @@ const Activity = () => {
   useEffect(() => {
     console.log(filters);
   }, [filters]);
+
+  const setName = (name: string) => {
+    if (!setFilters) return;
+    setFilters((prev) => ({
+      ...prev,
+      name: name,
+    }));
+  }
 
   const setDay = (date: Date) => {
     if (!setFilters) return;
@@ -56,7 +63,7 @@ const Activity = () => {
         <input
           className="border-2 border-black rounded-md"
           type="text"
-          value={name}
+          value={filters.name}
           onChange={(e) => {
             setName(e.currentTarget.value);
           }}
@@ -76,7 +83,7 @@ const Activity = () => {
           <Link
             href={{
               pathname: "/listings",
-              query: { name: name },
+              query: { name: filters.name },
             }}
           >
             <button className="px-4 py-4 bg-black rounded-md text-white hover:bg-white hover:text-black border-2 border-black">Search</button>
