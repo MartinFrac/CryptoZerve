@@ -14,14 +14,14 @@ const createVenue: NextPage = () => {
   const provider = mmContext.provider;
   const [venueObject, setVenueObject] = useState<VenueData>({
     id: "",
-    address: "",
-    owner: "",
+    contractAddress: "",
+    ownerAddress: "",
     name: "",
     description: "",
-    price: 0,
-    topUp: 0,
-    units: 0,
-    venue: "",
+    priceInWei: 0,
+    coverage: 0,
+    unitsPerSlot: 0,
+    location: "",
     startDay: 0,
     startYear: new Date().getFullYear(),
     daysRule: [],
@@ -50,7 +50,7 @@ const createVenue: NextPage = () => {
     setSlotsRule(slotsRule);
     setVenueObject((prev) => ({
       ...prev,
-      units: units,
+      unitsPerSlot: units,
       startHour: start[0],
       startMinute: start[1],
       endHour: end[0],
@@ -77,14 +77,14 @@ const createVenue: NextPage = () => {
     const factory = new ContractFactory(VENUE_ABI, VENUE_BYTECODE, signer);
     const contract = await factory.deploy(
       venueObject.name,
-      venueObject.venue,
+      venueObject.location,
       venueObject.startDay,
       currentYear,
       daysRule.toBigInt(),
       slotsRule,
-      venueObject.units,
-      venueObject.price,
-      { value: venueObject.topUp }
+      venueObject.unitsPerSlot,
+      venueObject.priceInWei,
+      { value: venueObject.coverage }
     );
     console.log(contract.address);
     await contract.deployTransaction.wait();
@@ -95,16 +95,16 @@ const createVenue: NextPage = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        address: contract.address,
-        owner: user,
+        contractAddress: contract.address,
+        ownerAddress: user,
         description: venueObject.description,
         name: venueObject.name,
-        price: venueObject.price,
-        topUp: venueObject.topUp,
-        units: venueObject.units,
+        priceInWei: venueObject.priceInWei,
+        coverage: venueObject.coverage,
+        unitsPerSlot: venueObject.unitsPerSlot,
         startDay: venueObject.startDay,
         startYear: venueObject.startYear,
-        venue: venueObject.venue,
+        location: venueObject.location,
         daysRule: venueObject.daysRule,
         startHour: venueObject.startHour,
         endHour: venueObject.endHour,

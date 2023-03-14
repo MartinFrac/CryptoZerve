@@ -4,21 +4,21 @@ import type { NextApiRequest, NextApiResponse } from "next";
 
 export type VenueData = {
   id: string;
-  address: string;
-  owner: string;
-  name: string;
-  description: string;
-  price: number;
-  topUp: number;
-  units: number;
-  venue: string;
-  startDay: number;
-  startYear: number;
+  contractAddress: string;
+  coverage: number;
   daysRule: string[];
-  startHour: number;
+  description: string;
   endHour: number;
-  startMinute: number;
   endMinute: number;
+  location: string;
+  name: string;
+  ownerAddress: string;
+  priceInWei: number;
+  startDay: number;
+  startHour: number;
+  startMinute: number;
+  startYear: number;
+  unitsPerSlot: number;
 };
 
 export default async function handler(
@@ -33,14 +33,14 @@ export default async function handler(
       console.log(`${doc.id} => ${JSON.stringify(doc.data())}`);
       listings.push({
         id: doc.id,
-        address: doc.data().address,
-        owner: doc.data().owner,
+        contractAddress: doc.data().contractAddress,
+        ownerAddress: doc.data().owner,
         name: doc.data().name,
         description: doc.data().description,
-        price: doc.data().price,
-        topUp: doc.data().topUp,
-        units: doc.data().price,
-        venue: doc.data().venue,
+        priceInWei: doc.data().priceInWei,
+        coverage: doc.data().coverage,
+        unitsPerSlot: doc.data().unitsPerSlot,
+        location: doc.data().location,
         startDay: doc.data().startDay,
         startYear: doc.data().startYear,
         daysRule: doc.data().daysRule,
@@ -55,3 +55,5 @@ export default async function handler(
   }
   res.status(200).json(listings);
 }
+
+

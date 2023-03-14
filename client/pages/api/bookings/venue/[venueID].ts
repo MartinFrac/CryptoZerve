@@ -1,31 +1,20 @@
 import { db } from "../../../../config/firebase";
-import { addDoc, collection, getDocs } from "firebase/firestore";
+import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
 import type { NextApiRequest, NextApiResponse } from "next";
-
-export type VenueBookingData = {
-  id: string;
-  bookingTypeID: string;
-  day: string;
-  hourEnd: number;
-  hourStart: number;
-  minuteEnd: number;
-  minuteStart: number;
-  name: string;
-  units: number;
-};
+import { BookingData } from "..";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<VenueBookingData[]>
+  res: NextApiResponse<BookingData[]>
 ) {
-  const { query } = req;
-  const { venueID } = query;
+  const { venueID } = req.query;
   if (venueID === undefined) return;
   console.log(`api/bookings/venue/${venueID}: executed`);
+
   if (req.method === "POST") {
     try {
-      const docRef = await addDoc(collection(db, "venueBookings", venueID.toString(), "bookings"), req.body);
-      console.log(`document added: ${docRef}`)
+      const docRef = await addDoc(collection(db, "venues"), req.body);
+      console.log(`document added: ${docRef}`);
     } catch (error) {
       console.error("Error adding document: ", error);
       return res.status(204);
@@ -33,20 +22,24 @@ export default async function handler(
     return res.status(200);
   }
 
-  let bookings: VenueBookingData[] = [];
+  let bookings: BookingData[] = [];
   try {
-    const querySnapshot = await getDocs(collection(db, "venueBookings", venueID.toString(), "bookings"));
-    querySnapshot.forEach((doc) => {
+    const collectionRef = collection(db, "venues");
+    const q = query(collectionRef, where("venueID", "==", venueID));
+    const venuesSnapshot = await getDocs(q);
+    venuesSnapshot.forEach((doc) => {
       console.log(`${doc.id} => ${JSON.stringify(doc.data())}`);
       bookings.push({
         id: doc.id,
-        bookingTypeID: doc.data().bookingTypeID,
+        venueID: doc.data().venueID,
+        userAddress: doc.data().userAddress,
         day: doc.data().day,
-        hourEnd: doc.data().hourEnd,
-        hourStart: doc.data().hourStart,
-        minuteEnd: doc.data().minuteEnd,
-        minuteStart: doc.data().minuteStart,
+        startHour: doc.data().startHour,
+        startMinute: doc.data().startMinute,
+        endHour: doc.data().endHour,
+        endMinute: doc.data().endMinute,
         name: doc.data().name,
+        pin: doc.data().pin,
         units: doc.data().units,
       });
     });

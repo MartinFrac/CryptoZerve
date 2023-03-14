@@ -10,10 +10,10 @@ const MyVenue: React.FC<Props> = (props) => {
   return (
     <div className="bg-slate-600 flex flex-col m-4 px-4 py-4 items-start rounded text-white">
       <div>Name: {props.details.name}</div>
-      <div>Venue: {props.details.venue}</div>
+      <div>Venue: {props.details.location}</div>
       <div>Description: {props.details.description}</div>
-      <div>Price: {props.details.price}</div>
-      <div>TopUp: {props.details.topUp}</div>
+      <div>Price: {props.details.priceInWei}</div>
+      <div>TopUp: {props.details.coverage}</div>
       <Link
         href={{
           pathname: "/venueBookings",

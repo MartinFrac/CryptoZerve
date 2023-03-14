@@ -1,5 +1,5 @@
 import { db } from "../../../../config/firebase";
-import { addDoc, collection, getDocs } from "firebase/firestore";
+import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { VenueData } from "./../index";
 
@@ -7,20 +7,14 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<VenueData[]>
 ) {
-  console.log("api/myBookingTypes: executed");
-  const { query } = req;
-  const { id } = query;
-  let bookings: VenueData[] = [];
+  const { id } = req.query;
+  if (id === undefined) return res.status(204);
+  console.log(`api/venues/user/${id}: executed`);
 
   if (req.method === "POST") {
     try {
-      const bookingTypeRef = await addDoc(collection(db, "booking_types"), req.body);
-      const docObject = { ID: bookingTypeRef.id };
-      const myBookingTypeRef = await addDoc(
-        collection(db, "myBookingTypes", `${id}`, "bookingTypes"),
-        docObject
-      );
-      console.log(`documents added: ${bookingTypeRef}, ${myBookingTypeRef}`);
+      const venueRef = await addDoc(collection(db, "venues"), req.body);
+      console.log(`document added: ${venueRef}`);
     } catch (error) {
       console.error("Error adding document: ", error);
       return res.status(204);
@@ -28,31 +22,23 @@ export default async function handler(
     return res.status(200);
   }
 
+  let venues: VenueData[] = [];
   try {
-    const { query } = req;
-    const { user } = query;
-    if (!user) return;
-    const collectionMyBookingTypes = collection(
-      db,
-      "myBookingTypes",
-      user.toString(),
-      "bookingTypes"
-    );
-    const myBTSnaps = await getDocs(collectionMyBookingTypes);
-    const bookingTypesSnaps = await getDocs(collection(db, "booking_types"));
-    bookingTypesSnaps.forEach((doc) => {
-      if (!myBTSnaps.docs.find((d) => d.data().ID === doc.id)) return;
+    const venuesRef = collection(db, "venues");
+    const q = query(venuesRef, where("ownerAddress", "==", id.toString()));
+    const venueSnaps = await getDocs(q);
+    venueSnaps.forEach((doc) => {
       console.log(`${doc.id} => ${JSON.stringify(doc.data())}`);
-      bookings.push({
+      venues.push({
         id: doc.id,
-        address: doc.data().address,
-        owner: doc.data().owner,
+        contractAddress: doc.data().contractAddress,
+        ownerAddress: doc.data().ownerAddress,
         name: doc.data().name,
         description: doc.data().description,
-        price: doc.data().price,
-        topUp: doc.data().topUp,
-        venue: doc.data().venue,
-        units: doc.data().units,
+        priceInWei: doc.data().priceInWei,
+        coverage: doc.data().coverage,
+        location: doc.data().location,
+        unitsPerSlot: doc.data().unitsPerSlot,
         startDay: doc.data().startDay,
         startYear: doc.data().startYear,
         daysRule: doc.data().daysRule,
@@ -65,5 +51,5 @@ export default async function handler(
   } catch (e) {
     console.error("Error adding document: ", e);
   }
-  res.status(200).json(bookings);
+  res.status(200).json(venues);
 }

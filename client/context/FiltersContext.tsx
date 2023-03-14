@@ -10,7 +10,7 @@ type ContextProps = {
   setFilters: Dispatch<SetStateAction<Filters>> | null
 };
 
-type Filters = {
+export type Filters = {
   name: string;
   units: number;
   day: Date;

@@ -34,7 +34,7 @@ const Listing: React.FC<Props> = (props) => {
     }
     const signer = provider.getSigner();
     const VenueContract = new ethers.Contract(
-      props.details.address,
+      props.details.contractAddress,
       VENUE_ABI,
       provider
     );
@@ -47,7 +47,7 @@ const Listing: React.FC<Props> = (props) => {
       const slotsStart = filters.hourStart * 2 + convertMinutesStart + 1;
       const slotsEnd = filters.hourEnd * 2 + convertMinutesEnd;
       const nOSlots = slotsEnd - slotsStart + 1;
-      const cost = props.details.price * filters.units * nOSlots;
+      const cost = props.details.priceInWei * filters.units * nOSlots;
       console.log(filters);
       console.log(
         `pin: ${pin}, day: ${day}, ss:${slotsStart}, se: ${slotsEnd}, cost: ${cost}`
@@ -71,15 +71,15 @@ const Listing: React.FC<Props> = (props) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          bookingTypeID: props.details.id,
+          venueID: props.details.id,
           day: filters.day.toDateString(),
-          hourEnd: filters.hourEnd,
-          hourStart: filters.hourStart,
-          minuteEnd: filters.minuteStart,
-          minuteStart: filters.minuteStart,
-          name: props.details.name,
+          endHour: filters.hourEnd,
+          startHour: filters.hourStart,
+          endMinute: filters.minuteStart,
+          startMinute: filters.minuteStart,
           pin: pin + 1,
           units: filters.units,
+          userAddress: user,
         }),
       });
     } catch (err) {
@@ -91,8 +91,8 @@ const Listing: React.FC<Props> = (props) => {
     <div className="bg-slate-600 flex flex-col m-4 px-4 py-4 items-start rounded text-white">
       <div>Name: {props.details.name}</div>
       <div>Description: {props.details.description}</div>
-      <div>Price: {props.details.price.toString()}</div>
-      <div>Venue: {props.details.venue}</div>
+      <div>Price: {props.details.priceInWei.toString()}</div>
+      <div>Venue: {props.details.location}</div>
       <button
         onClick={() => request()}
         className="bg-white max-w-md px-2 py-2 mt-2 text-black"

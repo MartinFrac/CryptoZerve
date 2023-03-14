@@ -1,9 +1,9 @@
 import React from "react";
-import { Venue } from "../../pages/api/listings";
+import { VenueData } from "../../pages/api/venues";
 
 type Props = {
-  venueObject: Venue;
-  setVenueObject: React.Dispatch<React.SetStateAction<Venue>>;
+  venueObject: VenueData;
+  setVenueObject: React.Dispatch<React.SetStateAction<VenueData>>;
 };
 
 const Inputs: React.FC<Props> = ({ venueObject, setVenueObject }) => {
@@ -24,21 +24,21 @@ const Inputs: React.FC<Props> = ({ venueObject, setVenueObject }) => {
   const setPriceHandler = (value: string) => {
     setVenueObject((prev) => ({
       ...prev,
-      price: parseInt(value),
+      priceInWei: parseInt(value),
     }));
   };
 
   const setTopUpHandler = (value: string) => {
     setVenueObject((prev) => ({
       ...prev,
-      topUp: parseInt(value),
+      coverage: parseInt(value),
     }));
   };
 
   const setVenueHandler = (value: string) => {
     setVenueObject((prev) => ({
       ...prev,
-      venue: value,
+      location: value,
     }));
   };
 
@@ -79,7 +79,7 @@ const Inputs: React.FC<Props> = ({ venueObject, setVenueObject }) => {
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           type="number"
           id="price"
-          value={venueObject.price}
+          value={venueObject.priceInWei}
           onChange={(event) => setPriceHandler(event.target.value)}
         />
       </div>
@@ -91,7 +91,7 @@ const Inputs: React.FC<Props> = ({ venueObject, setVenueObject }) => {
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           type="number"
           id="price"
-          value={venueObject.topUp}
+          value={venueObject.coverage}
           onChange={(event) => setTopUpHandler(event.target.value)}
         />
       </div>
@@ -103,7 +103,7 @@ const Inputs: React.FC<Props> = ({ venueObject, setVenueObject }) => {
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           type="text"
           id="owner"
-          value={venueObject.venue}
+          value={venueObject.location}
           onChange={(event) => setVenueHandler(event.target.value)}
         />
       </div>

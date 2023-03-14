@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useMMContext } from "../context/MetamaskContext";
 import { NextPage } from "next";
-import { VenueBookingData } from "./api/bookings/venue/[venueID]";
+import { BookingData } from "./api/bookings/index";
 import VenueBooking from "../components/VenueBooking";
 import { useRouter } from "next/router";
 
@@ -9,7 +9,7 @@ const VenueBookings: NextPage = () => {
   const mmContext = useMMContext();
   const user = mmContext.account;
   const [venueBookingsList, setVenueBookingsList] = useState<
-    VenueBookingData[]
+    BookingData[]
   >([]);
   const router = useRouter();
   const { venueID } = router.query;

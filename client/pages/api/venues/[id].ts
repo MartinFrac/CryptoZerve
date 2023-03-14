@@ -12,18 +12,18 @@ export default async function handler(
   console.log(`api/listings/${id}: executed`);
   if (id === undefined) return;
   try {
-    const docSnap = await getDoc(doc(db, "booking_types", id.toString()));
+    const docSnap = await getDoc(doc(db, "bookings", id.toString()));
     if (docSnap.exists()) {
       res.status(200).json({
         id: docSnap.id,
-        address: docSnap.data().address,
-        owner: docSnap.data().owner,
+        contractAddress: docSnap.data().address,
+        ownerAddress: docSnap.data().owner,
         name: docSnap.data().name,
         description: docSnap.data().description,
-        price: docSnap.data().price,
-        topUp: docSnap.data().topUp,
-        units: docSnap.data().price,
-        venue: docSnap.data().venue,
+        priceInWei: docSnap.data().price,
+        coverage: docSnap.data().topUp,
+        unitsPerSlot: docSnap.data().price,
+        location: docSnap.data().venue,
         startDay: docSnap.data().startDay,
         startYear: docSnap.data().startYear,
         daysRule: docSnap.data().daysRule,
