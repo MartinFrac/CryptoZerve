@@ -7,23 +7,24 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<VenueData>
 ) {
-  const { query } = req;
-  const { id } = query;
-  console.log(`api/listings/${id}: executed`);
+  const { id } = req.query;
   if (id === undefined) return;
+  console.log(`api/venues/${id}: executed`);
+
   try {
-    const docSnap = await getDoc(doc(db, "bookings", id.toString()));
+    const docSnap = await getDoc(doc(db, "venues", id.toString()));
     if (docSnap.exists()) {
+      console.log(docSnap.id)
       res.status(200).json({
         id: docSnap.id,
-        contractAddress: docSnap.data().address,
-        ownerAddress: docSnap.data().owner,
+        contractAddress: docSnap.data().contractAddress,
+        ownerAddress: docSnap.data().ownerAddress,
         name: docSnap.data().name,
         description: docSnap.data().description,
-        priceInWei: docSnap.data().price,
-        coverage: docSnap.data().topUp,
-        unitsPerSlot: docSnap.data().price,
-        location: docSnap.data().venue,
+        priceInWei: docSnap.data().priceInWei,
+        coverage: docSnap.data().coverage,
+        unitsPerSlot: docSnap.data().unitsPerSlot,
+        location: docSnap.data().location,
         startDay: docSnap.data().startDay,
         startYear: docSnap.data().startYear,
         daysRule: docSnap.data().daysRule,

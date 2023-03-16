@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { useMMContext } from "../context/MetamaskContext";
 import VENUE_ABI from "../abi/VenueSlots.json";
 import { ethers } from "ethers";
-import { VenueBookingData } from "../pages/api/bookings/venue/[venueID]";
+import { BookingData } from "../pages/api/bookings/index";
 import { VenueData } from "../pages/api/venues";
 
 type Props = {
-  details: VenueBookingData;
+  details: BookingData;
 };
 
 const VenueBooking: React.FC<Props> = (props) => {
@@ -27,9 +27,9 @@ const VenueBooking: React.FC<Props> = (props) => {
     return dayOfYear;
   };
 
-  const getVenue = async (bookingTypeID: string): Promise<VenueData> => {
+  const getVenue = async (venueID: string): Promise<VenueData> => {
     try {
-      const res = await fetch(`/api/venues/${bookingTypeID}`);
+      const res = await fetch(`/api/venues/${venueID}`);
       const data = await res.json();
       return data as VenueData;
     } catch (err) {
@@ -43,17 +43,17 @@ const VenueBooking: React.FC<Props> = (props) => {
       return;
     }
     try {
-      const bookingType = await getVenue(props.details.bookingTypeID);
+      const venue = await getVenue(props.details.venueID);
       const signer = provider.getSigner();
       const VenueContract = new ethers.Contract(
-        bookingType.address,
+        venue.contractAddress,
         VENUE_ABI,
         provider
       );
-      console.log(bookingType);
+      console.log(venue);
       const pin = pinInput;
       const dayOfTheYear = getDayOfYear(new Date());
-      const day = dayOfTheYear - bookingType.startDay + 1;
+      const day = dayOfTheYear - venue.startDay + 1;
       const addressEnd = parseInt(addressEndInput, 16);
       const VenueContractWithSigner = VenueContract.connect(signer);
       console.log(day)
@@ -75,10 +75,10 @@ const VenueBooking: React.FC<Props> = (props) => {
       <div>Name: {props.details.name}</div>
       <div>Description: {props.details.day}</div>
       <div>
-        Time start: {props.details.hourStart}:{props.details.minuteStart}
+        Time start: {props.details.startHour.toString().padStart(2,"0")}:{props.details.startMinute.toString().padEnd(2,"0")}
       </div>
       <div>
-        Time end: {props.details.hourEnd}:{props.details.minuteEnd}
+        Time end: {props.details.endHour.toString().padStart(2,"0")}:{props.details.endMinute.toString().padEnd(2,"0")}
       </div>
       <div>Units: {props.details.units}</div>
       <input

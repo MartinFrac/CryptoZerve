@@ -88,7 +88,7 @@ const SlotsConverter: React.FC<Props> = ({ setRules }) => {
       daysList,
       units
     );
-  }, [daysList, startDay]);
+  }, [units, daysList, startDay]);
 
   const setStartTime = (hour: number, minute: number) => {
     setTimeStart({ hour: hour, minute: minute });

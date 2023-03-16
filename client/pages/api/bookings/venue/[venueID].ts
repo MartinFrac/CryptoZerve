@@ -24,7 +24,7 @@ export default async function handler(
 
   let bookings: BookingData[] = [];
   try {
-    const collectionRef = collection(db, "venues");
+    const collectionRef = collection(db, "bookings");
     const q = query(collectionRef, where("venueID", "==", venueID));
     const venuesSnapshot = await getDocs(q);
     venuesSnapshot.forEach((doc) => {

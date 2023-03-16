@@ -1,11 +1,11 @@
 import React from "react";
-import { MyBookingData } from "../pages/api/bookings";
+import { BookingData } from "../pages/api/bookings";
 import { useMMContext } from "../context/MetamaskContext";
 import VENUE_ABI from "../abi/VenueSlots.json";
 import { ethers } from "ethers";
 
 type Props = {
-  details: MyBookingData;
+  details: BookingData;
 };
 
 const MyBooking: React.FC<Props> = (props) => {
@@ -38,10 +38,10 @@ const MyBooking: React.FC<Props> = (props) => {
       <div>Name: {props.details.name}</div>
       <div>Description: {props.details.day}</div>
       <div>
-        Time start: {props.details.hourStart}:{props.details.minuteStart}
+        Time start: {props.details.startHour.toString().padStart(2, "0")}:{props.details.startMinute.toString().padEnd(2, "0")}
       </div>
       <div>
-        Time end: {props.details.hourEnd}:{props.details.minuteEnd}
+        Time end: {props.details.endHour.toString().padStart(2, "0")}:{props.details.endMinute.toString().padEnd(2, "0")}
       </div>
       <div>Pin: {props.details.pin}</div>
       <div>Units: {props.details.units}</div>

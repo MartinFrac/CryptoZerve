@@ -26,7 +26,7 @@ const VenueBookings: NextPage = () => {
       });
   }, []);
 
-  const myBookingsComponent = venueBookingsList.map((item) => {
+  const venueBookingsComponent = venueBookingsList.map((item) => {
     return <VenueBooking key={item.id} details={item} />;
   });
 
@@ -34,7 +34,7 @@ const VenueBookings: NextPage = () => {
     <div className="text-center">
       <div className="flex flex-row gap-[4rem]">
         <div className="flex flex-col justify-start flex-1">
-          {myBookingsComponent}
+          {venueBookingsComponent}
         </div>
         <div className="flex-1"></div>
       </div>
