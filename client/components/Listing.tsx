@@ -75,7 +75,7 @@ const Listing: React.FC<Props> = (props) => {
           day: filters.day.toDateString(),
           endHour: filters.hourEnd,
           startHour: filters.hourStart,
-          endMinute: filters.minuteStart,
+          endMinute: filters.minuteEnd,
           startMinute: filters.minuteStart,
           pin: pin + 1,
           units: filters.units,
