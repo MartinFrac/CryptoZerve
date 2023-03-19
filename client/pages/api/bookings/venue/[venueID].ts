@@ -33,6 +33,8 @@ export default async function handler(
         id: doc.id,
         venueID: doc.data().venueID,
         userAddress: doc.data().userAddress,
+        isConfirmed: doc.data().isConfirmed,
+        payed: doc.data().payed,
         day: doc.data().day,
         startHour: doc.data().startHour,
         startMinute: doc.data().startMinute,

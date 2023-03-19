@@ -6,6 +6,8 @@ export type BookingData = {
   id: string;
   venueID: string;
   userAddress: string;
+  isConfirmed: boolean;
+  payed: number;
   day: string;
   startHour: number;
   startMinute: number;
@@ -20,17 +22,19 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<BookingData[]>
 ) {
-  console.log("api/mybookings: executed");
+  console.log("api/bookings: executed");
 
   let bookings: BookingData[] = [];
   try {
-    const querySnapshot = await getDocs(collection(db, "myBookings"));
+    const querySnapshot = await getDocs(collection(db, "bookings"));
     querySnapshot.forEach((doc) => {
       console.log(`${doc.id} => ${JSON.stringify(doc.data())}`);
       bookings.push({
         id: doc.id,
         venueID: doc.data().venueID,
         userAddress: doc.data().userAddress,
+        isConfirmed: doc.data().isConfirmed,
+        payed: doc.data().payed,
         day: doc.data().day,
         startHour: doc.data().startHour,
         startMinute: doc.data().startMinute,

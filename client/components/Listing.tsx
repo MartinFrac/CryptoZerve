@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { VenueData } from "../pages/api/venues";
 import VENUE_ABI from "../abi/VenueSlots.json";
 import { useMMContext } from "../context/MetamaskContext";
@@ -15,6 +15,7 @@ const Listing: React.FC<Props> = (props) => {
   const provider = mmContext.provider;
   const filtersContext = useFiltersContext();
   const { filters } = filtersContext;
+  const [nameInput, setNameInput] = useState("");
 
   const getDayOfYear = (date: Date): number => {
     const startOfYear = new Date(date.getFullYear(), 0, 0);
@@ -72,14 +73,17 @@ const Listing: React.FC<Props> = (props) => {
         },
         body: JSON.stringify({
           venueID: props.details.id,
+          userAddress: user,
+          isConfirmed: false,
+          payed: cost,
           day: filters.day.toDateString(),
-          endHour: filters.hourEnd,
           startHour: filters.hourStart,
-          endMinute: filters.minuteEnd,
           startMinute: filters.minuteStart,
+          endHour: filters.hourEnd,
+          endMinute: filters.minuteEnd,
+          name: nameInput,
           pin: pin + 1,
           units: filters.units,
-          userAddress: user,
         }),
       });
     } catch (err) {
@@ -93,6 +97,18 @@ const Listing: React.FC<Props> = (props) => {
       <div>Description: {props.details.description}</div>
       <div>Price: {props.details.priceInWei.toString()}</div>
       <div>Venue: {props.details.location}</div>
+      <div className="px-6 py-4">
+        <label className="block font-bold text-gray-700 mb-2" htmlFor="name">
+          Name your booking
+        </label>
+        <input
+          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          type="text"
+          id="name"
+          value={nameInput}
+          onChange={(event) => setNameInput(event.target.value)}
+        />
+      </div>
       <button
         onClick={() => request()}
         className="bg-white max-w-md px-2 py-2 mt-2 text-black"

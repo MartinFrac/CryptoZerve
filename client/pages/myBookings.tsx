@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useMMContext } from "../context/MetamaskContext";
-import { MyBookingData } from "./api/bookings";
+import { BookingData } from "./api/bookings";
 import MyBooking from "../components/MyBooking";
 import { NextPage } from "next";
 
 const myBookings: NextPage = () => {
   const mmContext = useMMContext();
   const user = mmContext.account;
-  const [myBookingsList, setMyBookingsList] = useState<MyBookingData[]>([]);
+  const [myBookingsList, setMyBookingsList] = useState<BookingData[]>([]);
 
   useEffect(() => {
     if (user === null) {

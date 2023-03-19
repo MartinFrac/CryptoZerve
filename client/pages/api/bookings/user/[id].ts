@@ -1,5 +1,5 @@
 import { db } from "../../../../config/firebase";
-import { addDoc, collection, getDocs } from "firebase/firestore";
+import { FieldValue, addDoc, collection, doc, getDocs, setDoc, increment } from "firebase/firestore";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { BookingData } from "../.";
 
@@ -15,6 +15,8 @@ export default async function handler(
   if (req.method === "POST") {
     try {
       const myBookingsRef = await addDoc(collection(db, "bookings"), req.body);
+      const venueRef = doc(db, "venues", req.body.venueID)
+      await setDoc(venueRef, { coverage: increment(-req.body.payed) }, { merge: true })
       console.log(`documents added: ${myBookingsRef}`);
     } catch (error) {
       console.error("Error adding document: ", error);
@@ -32,6 +34,8 @@ export default async function handler(
         id: doc.id,
         venueID: doc.data().venueID,
         userAddress: doc.data().userAddress,
+        isConfirmed: doc.data().isConfirmed,
+        payed: doc.data().payed,
         day: doc.data().day,
         startHour: doc.data().startHour,
         startMinute: doc.data().startMinute,

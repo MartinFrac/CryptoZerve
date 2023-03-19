@@ -56,15 +56,24 @@ const VenueBooking: React.FC<Props> = (props) => {
       const day = dayOfTheYear - venue.startDay + 1;
       const addressEnd = parseInt(addressEndInput, 16);
       const VenueContractWithSigner = VenueContract.connect(signer);
-      console.log(day)
-      console.log(addressEnd)
-      console.log(pin)
+      console.log(day);
+      console.log(addressEnd);
+      console.log(pin);
       const response = await VenueContractWithSigner.confirmAttendance(
         day,
         addressEnd,
         pin
       );
       console.log(response);
+      fetch(`/api/bookings/${props.details.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          isConfirmed: true,
+        }),
+      });
     } catch (err) {
       console.log(err);
     }
@@ -75,12 +84,17 @@ const VenueBooking: React.FC<Props> = (props) => {
       <div>Name: {props.details.name}</div>
       <div>Description: {props.details.day}</div>
       <div>
-        Time start: {props.details.startHour.toString().padStart(2,"0")}:{props.details.startMinute.toString().padEnd(2,"0")}
+        Time start: {props.details.startHour.toString().padStart(2, "0")}:
+        {props.details.startMinute.toString().padEnd(2, "0")}
       </div>
       <div>
-        Time end: {props.details.endHour.toString().padStart(2,"0")}:{props.details.endMinute.toString().padEnd(2,"0")}
+        Time end: {props.details.endHour.toString().padStart(2, "0")}:
+        {props.details.endMinute.toString().padEnd(2, "0")}
       </div>
       <div>Units: {props.details.units}</div>
+      <label className="block font-bold text-gray-700 mb-2" htmlFor="pin">
+        PIN:
+      </label>
       <input
         className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         type="number"
@@ -88,6 +102,9 @@ const VenueBooking: React.FC<Props> = (props) => {
         value={pinInput}
         onChange={(event) => setPinInput(parseInt(event.target.value))}
       />
+      <label className="block font-bold text-gray-700 mb-2" htmlFor="addressEnd">
+        Address End (2):
+      </label>
       <input
         className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         type="string"
