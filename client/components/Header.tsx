@@ -12,8 +12,8 @@ const Header = () => {
         <Link href="/">
           <div className={styles}>CryptoZerve</div>
         </Link>
-        <div className="rounded-full bg-yellow-600 px-2 py-4 flex items-center">
-          USDT
+        <div className="rounded-full bg-yellow-600 px-4 py-4 flex items-center">
+          <div className="text-black">WEI</div>
         </div>
       </div>
       <div className="flex flex-row gap-6">
