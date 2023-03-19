@@ -1,8 +1,6 @@
 // SPDX-License-Identifier: MIT
 
 pragma solidity ^0.8.17;
-//ideas:
-//let enter hours and minutes instead of slots
 
 contract VenueSlots {
   string public name;
