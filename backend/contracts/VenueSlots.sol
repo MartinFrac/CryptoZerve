@@ -28,24 +28,34 @@ contract VenueSlots {
   //day and half hour slot to number of units available (counter of units available). i.e. 24/30. Schema: day + slot = 3 + 24 (third day, 24th slot)
 
   //=====GETTERS=====
-  //TODO: add rules getters
 
   function getNOPayedSlots() external view onlyOwner returns(uint256) {
     return _payedSlots;
+  }
+
+  function getSlotsDaysRule() external view returns(uint256) {
+    return _slotsDaysRule;
+  }
+
+  function getSlotsHalfHourRule() external view returns(uint256) {
+    return _slotsHalfHourRule;
   }
 
   function getNOFreeSlotUnits(uint16 day, uint8 slot) external view returns(uint64) {
     return _nOSlotsPerHalfHour - _halfHourSlotToUnits[convertToDayPlusHalfHourMap(day, slot)];
   }
 
+  //get bookings of a user
   function getBookings(address user) external view onlyOwner returns(Booking[] memory) {
     return _bookings[user];
   }
 
+  //get my bookings
   function getBookings() external view returns(Booking[] memory) {
     return _bookings[msg.sender];
   }
 
+  //get booking by ref number
   function getBooking(uint8 day, uint8 addressEnd, uint16 pin) external view onlyOwner returns(Booking memory) {
     Booking memory booking = _refToBooking[convertToRef(day, addressEnd, pin)];
     require(booking.daySlot != 0, "wrong ref");
@@ -77,7 +87,8 @@ contract VenueSlots {
   }
 
   //=====EVENTS=====
-  event Test(uint256 test);
+  event Confirmed(uint32 ref);
+  event Booked(uint32 ref);
 
   //=====MODIFIERS=====
   modifier onlyOwner() {
@@ -95,6 +106,7 @@ contract VenueSlots {
     Booking memory booking = _refToBooking[ref];
     require(booking.daySlot != 0, "wrong ref");
     uint256 payback = booking.price * 2;
+    emit Confirmed(ref);
     owner.transfer(payback);
     return payback;
   }
@@ -113,6 +125,7 @@ contract VenueSlots {
     createBooking(day, startSlot, endSlot, units, _price, ref);
     fillSlots(endSlot - startSlot + 1, day, startSlot, units);
     _payedSlots -= (endSlot - startSlot + 1) * units;
+    emit Booked(ref);
     return uint16(ref);
   }
 
