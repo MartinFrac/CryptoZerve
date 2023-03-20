@@ -96,7 +96,7 @@ const Activity = () => {
     </div>
   );
   const activityContainer = (
-    <div className="m-6 rounded-lg bg-white border-black border-solid border-4">{searchAndFilters}</div>
+    <div className="m-6 rounded-lg bg-white border-black border-solid border-4 w-fit">{searchAndFilters}</div>
   );
 
   return activityContainer;

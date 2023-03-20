@@ -7,7 +7,7 @@ const Header = () => {
   const user = mmContext.account;
 
   return (
-    <div className="fixed w-full bg-black flex justify-between items-center px-8 py-2 text-white">
+    <header className="fixed w-full bg-black flex justify-between items-center px-8 py-2 text-white">
       <div className="flex flex-row gap-6 items-stretch">
         <Link href="/">
           <div className={styles}>CryptoZerve</div>
@@ -34,7 +34,7 @@ const Header = () => {
           </button>
         )}
       </div>
-    </div>
+    </header>
   );
 };
 

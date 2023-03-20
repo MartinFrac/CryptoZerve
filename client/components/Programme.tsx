@@ -1,8 +1,15 @@
+import Image from 'next/image'
 import React from 'react'
 
 const Programme = () => {
   return (
-    <div>Programme</div>
+    <div>
+      <Image 
+        src="/ethereumLogo.png" 
+        width={600}
+        height={200}
+      />
+    </div>
   )
 }
 
