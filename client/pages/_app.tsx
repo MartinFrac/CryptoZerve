@@ -10,13 +10,14 @@ function MyApp({ Component, pageProps }: AppProps) {
     <>
       <MetamaskContextProvider>
         <Header />
-        <main className="min-h-[calc(100vh-6rem)] px-[6rem] py-[6rem]">
-          <FiltersContextProvider>
-            <Component {...pageProps} />
-          </FiltersContextProvider>
+        <main className="min-h-[calc(100vh-6rem)] px-[14rem] py-[10rem] bg-gray-700">
+          <div className="flex flex-col items-center bg-white rounded-md py-10">
+            <FiltersContextProvider>
+              <Component {...pageProps} />
+            </FiltersContextProvider>
+          </div>
         </main>
         <Footer />
-       
       </MetamaskContextProvider>
     </>
   );

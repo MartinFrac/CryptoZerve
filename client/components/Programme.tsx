@@ -3,7 +3,7 @@ import React from 'react'
 
 const Programme = () => {
   return (
-    <div>
+    <div className='mb-4'>
       <Image 
         src="/ethereumLogo.png" 
         width={600}

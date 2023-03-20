@@ -17,7 +17,7 @@ const Units: React.FC<Props> = ({ onSetUnits }) => {
     <div>
       <label>
         {'Units: '}
-        <select value={units} onChange={handleHoursChange}>
+        <select value={units} onChange={handleHoursChange} className='bg-white'>
           {Array.from(Array(24).keys()).map((hour) => (
             <option key={hour} value={hour}>
               {hour}

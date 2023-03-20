@@ -23,14 +23,14 @@ const Time: React.FC<Props> = ({ setTime }) => {
 
   return (
     <div className="flex flex-row gap-4">
-        <select value={hours} onChange={handleHoursChange}>
+        <select value={hours} onChange={handleHoursChange} className="bg-white">
           {Array.from(Array(24).keys()).map((hour) => (
             <option key={hour} value={hour}>
               {hour}
             </option>
           ))}
         </select>
-        <select value={minutes} onChange={handleMinutesChange}>
+        <select value={minutes} onChange={handleMinutesChange} className="bg-white">
           <option value="0">0</option>
           <option value="30">30</option>
         </select>

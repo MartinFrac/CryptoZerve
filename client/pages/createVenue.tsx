@@ -115,23 +115,25 @@ const createVenue: NextPage = () => {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="max-w-xl mx-auto mt-8 bg-white rounded-lg overflow-hidden shadow-md"
-    >
-      <div>
-        <div className="flex flex-row p-2">
-          <Inputs venueObject={venueObject} setVenueObject={setVenueObject} />
-          <RulesComponent setRules={setRules} />
+    <div className="bg-white">
+      <form
+        onSubmit={handleSubmit}
+        className="max-w-xl mx-auto mt-8 bg-gray-200 rounded-lg overflow-hidden shadow-md"
+      >
+        <div>
+          <div className="flex flex-row p-2">
+            <Inputs venueObject={venueObject} setVenueObject={setVenueObject} />
+            <RulesComponent setRules={setRules} />
+          </div>
+          <button
+            type="submit"
+            className="text-center w-full p-4 bg-black text-white"
+          >
+            Submit
+          </button>
         </div>
-        <button
-          type="submit"
-          className="text-center w-full p-4 bg-black text-white"
-        >
-          Submit
-        </button>
-      </div>
-    </form>
+      </form>
+    </div>
   );
 };
 
