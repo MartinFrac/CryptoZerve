@@ -21,16 +21,7 @@ const myBookingTypes: NextPage = () => {
     return <MyVenue key={item.id} details={item} />;
   });
 
-  return (
-    <div className="text-center">
-      <div className="flex flex-row gap-[4rem]">
-        <div className="flex flex-col justify-start flex-1">
-          {myBookingsComponent}
-        </div>
-        <div className="flex-1"></div>
-      </div>
-    </div>
-  );
+  return <div className="grid grid-cols-3 gap-4">{myBookingsComponent}</div>;
 };
 
 export default myBookingTypes;

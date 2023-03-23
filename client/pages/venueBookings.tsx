@@ -8,9 +8,7 @@ import { useRouter } from "next/router";
 const VenueBookings: NextPage = () => {
   const mmContext = useMMContext();
   const user = mmContext.account;
-  const [venueBookingsList, setVenueBookingsList] = useState<
-    BookingData[]
-  >([]);
+  const [venueBookingsList, setVenueBookingsList] = useState<BookingData[]>([]);
   const router = useRouter();
   const { venueID } = router.query;
 
@@ -30,16 +28,7 @@ const VenueBookings: NextPage = () => {
     return <VenueBooking key={item.id} details={item} />;
   });
 
-  return (
-    <div className="text-center">
-      <div className="flex flex-row gap-[4rem]">
-        <div className="flex flex-col justify-start flex-1">
-          {venueBookingsComponent}
-        </div>
-        <div className="flex-1"></div>
-      </div>
-    </div>
-  );
+  return <div className="grid grid-cols-3 gap-4">{venueBookingsComponent}</div>;
 };
 
 export default VenueBookings;

@@ -80,9 +80,11 @@ const VenueBooking: React.FC<Props> = (props) => {
   };
 
   return (
-    <div className="bg-slate-600 flex flex-col m-4 px-4 py-4 items-start rounded text-white">
-      <div>Name: {props.details.name}</div>
-      <div>Description: {props.details.day}</div>
+    <div className="bg-gray-200 max-w-xl flex flex-col m-4 px-4 py-4 items-start rounded text-gray-700 font-bold text-left">
+      <div className="flex flex-row justify-between w-full">
+        <div>{props.details.name}</div>
+        <div>{props.details.day}</div>
+      </div>
       <div>
         Time start: {props.details.startHour.toString().padStart(2, "0")}:
         {props.details.startMinute.toString().padEnd(2, "0")}
@@ -102,7 +104,10 @@ const VenueBooking: React.FC<Props> = (props) => {
         value={pinInput}
         onChange={(event) => setPinInput(parseInt(event.target.value))}
       />
-      <label className="block font-bold text-gray-700 mb-2" htmlFor="addressEnd">
+      <label
+        className="block font-bold text-gray-700 mb-2"
+        htmlFor="addressEnd"
+      >
         Address End (2):
       </label>
       <input
