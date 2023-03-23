@@ -25,7 +25,7 @@ const myBookings: NextPage = () => {
     return <MyBooking key={item.id} details={item} />;
   });
 
-  return <div>{myBookingsComponent}</div>;
+  return <div className="grid grid-cols-3 gap-4">{myBookingsComponent}</div>;
 };
 
 export default myBookings;
