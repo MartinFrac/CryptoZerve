@@ -39,10 +39,10 @@ const Listings: NextPage = () => {
   return (
     <div className="text-center">
       <div className="flex flex-row gap-[4rem]">
-        <div className="flex flex-col justify-start flex-1">
+        <div className="flex flex-col justify-start flex-1 min-w-[30rem]">
           {listingsComponent}
         </div>
-        <div className="flex-1"></div>
+        <div className="flex-1 min-w-[30rem]"></div>
       </div>
     </div>
   );

@@ -92,7 +92,7 @@ const Listing: React.FC<Props> = (props) => {
   };
 
   return (
-    <div className="bg-slate-600 flex flex-col m-4 px-4 py-4 items-start rounded text-white">
+    <div className="bg-gray-200 flex flex-col m-4 px-4 py-4 items-start rounded text-gray-700 font-bold">
       <div>Name: {props.details.name}</div>
       <div>Description: {props.details.description}</div>
       <div>Price: {props.details.priceInWei.toString()}</div>
