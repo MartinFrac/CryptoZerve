@@ -5,6 +5,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 export type BookingData = {
   id: string;
   venueID: string;
+  venueName: string;
   userAddress: string;
   isConfirmed: boolean;
   payed: number;
@@ -32,6 +33,7 @@ export default async function handler(
       bookings.push({
         id: doc.id,
         venueID: doc.data().venueID,
+        venueName: doc.data().venueName,
         userAddress: doc.data().userAddress,
         isConfirmed: doc.data().isConfirmed,
         payed: doc.data().payed,

@@ -73,6 +73,7 @@ const Listing: React.FC<Props> = (props) => {
         },
         body: JSON.stringify({
           venueID: props.details.id,
+          venueName: props.details.name,
           userAddress: user,
           isConfirmed: false,
           payed: cost,

@@ -33,6 +33,7 @@ export default async function handler(
       bookings.push({
         id: doc.id,
         venueID: doc.data().venueID,
+        venueName: doc.data().venueName,
         userAddress: doc.data().userAddress,
         isConfirmed: doc.data().isConfirmed,
         payed: doc.data().payed,

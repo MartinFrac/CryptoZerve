@@ -12,16 +12,22 @@ const MyBooking: React.FC<Props> = (props) => {
         <div>{props.details.name}</div>
         <div>{props.details.day}</div>
       </div>
-      <div>
-        Time start: {props.details.startHour.toString().padStart(2, "0")}:
-        {props.details.startMinute.toString().padEnd(2, "0")}
+      <div className="flex flex-row justify-between w-full">
+        <div>Venue: </div>
+        <div>{props.details.venueName}</div>
       </div>
-      <div>
-        Time end: {props.details.endHour.toString().padStart(2, "0")}:
-        {props.details.endMinute.toString().padEnd(2, "0")}
+      <div className="flex flex-row justify-between w-full">
+        <div>
+          Time start: {props.details.startHour.toString().padStart(2, "0")}:
+          {props.details.startMinute.toString().padEnd(2, "0")}
+        </div>
+        <div>
+          Time end: {props.details.endHour.toString().padStart(2, "0")}:
+          {props.details.endMinute.toString().padEnd(2, "0")}
+        </div>
+        <div>Pin: {props.details.pin}</div>
+        <div>Units: {props.details.units}</div>
       </div>
-      <div>Pin: {props.details.pin}</div>
-      <div>Units: {props.details.units}</div>
       <div>Is Confirmed: {props.details.isConfirmed ? "Yes" : "No"}</div>
     </div>
   );
