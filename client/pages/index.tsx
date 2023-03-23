@@ -12,6 +12,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className="flex flex-col items-center">
+        <h1 className="font-bold text-[2rem] text-gray-700">Find your next activity...</h1>
         <Activity />
         <Programme />
       </div>

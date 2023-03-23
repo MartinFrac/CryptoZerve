@@ -25,3 +25,7 @@ export const getTimeFromSlot = (slot: number): string => {
   if (remainder == 1) return result + "30";
   return result + "00";
 };
+
+export const getTimeFormatted = (hour: number, minute: number) => {
+  return `${hour.toString().padStart(2, "0")}:${minute.toString().padEnd(2, "0")}`
+}

@@ -4,6 +4,7 @@ import VENUE_ABI from "../abi/VenueSlots.json";
 import { useMMContext } from "../context/MetamaskContext";
 import { ethers } from "ethers";
 import { useFiltersContext } from "../context/FiltersContext";
+import { getTimeFormatted } from "../utils/dates";
 
 type Props = {
   details: VenueData;
@@ -47,8 +48,7 @@ const Listing: React.FC<Props> = (props) => {
       const convertMinutesEnd = filters.minuteEnd == 0 ? 0 : 1;
       const slotsStart = filters.hourStart * 2 + convertMinutesStart + 1;
       const slotsEnd = filters.hourEnd * 2 + convertMinutesEnd;
-      const nOSlots = slotsEnd - slotsStart + 1;
-      const cost = props.details.priceInWei * filters.units * nOSlots;
+      const cost = calculatePrice(slotsEnd, slotsStart);
       console.log(filters);
       console.log(
         `pin: ${pin}, day: ${day}, ss:${slotsStart}, se: ${slotsEnd}, cost: ${cost}`
@@ -91,13 +91,24 @@ const Listing: React.FC<Props> = (props) => {
     }
   };
 
+  const calculatePrice = (slotsEnd: number, slotsStart: number) => {
+    const nOSlots = slotsEnd - slotsStart + 1;
+    const cost = props.details.priceInWei * filters.units * nOSlots;
+    return cost;
+  };
+
   return (
-    <div className="bg-gray-200 flex flex-col m-4 px-4 py-4 items-start rounded text-gray-700 font-bold">
-      <div>Name: {props.details.name}</div>
-      <div>Description: {props.details.description}</div>
-      <div>Price: {props.details.priceInWei.toString()}</div>
-      <div>Venue: {props.details.location}</div>
-      <div className="px-6 py-4">
+    <div className="bg-gray-200 max-w-xl flex flex-col m-4 px-4 py-4 items-start rounded text-gray-700 font-bold text-left">
+      <div className="flex flex-row justify-between w-full">
+        <div>{props.details.name}</div>
+        <div>{props.details.priceInWei.toString() + ' wei'}</div>
+      </div>
+      <div className="flex flex-row justify-between w-full">
+        <div>{props.details.location}</div>
+        <div>{getTimeFormatted(props.details.startHour, props.details.startMinute)} - {getTimeFormatted(props.details.endHour, props.details.endMinute)}</div>
+      </div>
+      <div><span className="font-normal">{props.details.description}</span></div>
+      <div className="px-6 py-4 text-center w-full">
         <label className="block font-bold text-gray-700 mb-2" htmlFor="name">
           Name your booking
         </label>

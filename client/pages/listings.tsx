@@ -42,7 +42,6 @@ const Listings: NextPage = () => {
         <div className="flex flex-col justify-start flex-1 min-w-[30rem]">
           {listingsComponent}
         </div>
-        <div className="flex-1 min-w-[30rem]"></div>
       </div>
     </div>
   );
