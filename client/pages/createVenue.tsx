@@ -73,49 +73,54 @@ const createVenue: NextPage = () => {
       return;
     }
     const currentYear = new Date().getFullYear();
-    const signer = provider.getSigner();
-    const factory = new ContractFactory(VENUE_ABI, VENUE_BYTECODE, signer);
-    const contract = await factory.deploy(
-      venueObject.name,
-      venueObject.location,
-      venueObject.startDay,
-      currentYear,
-      daysRule.toBigInt(),
-      slotsRule,
-      venueObject.unitsPerSlot,
-      venueObject.priceInWei,
-      { value: venueObject.coverage }
-    );
-    console.log(contract.address);
-    await contract.deployTransaction.wait();
+    try {
+      const signer = provider.getSigner();
+      const factory = new ContractFactory(VENUE_ABI, VENUE_BYTECODE, signer);
+      const contract = await factory.deploy(
+        venueObject.name,
+        venueObject.location,
+        venueObject.startDay,
+        currentYear,
+        daysRule.toBigInt(),
+        slotsRule,
+        venueObject.unitsPerSlot,
+        venueObject.priceInWei,
+        { value: venueObject.coverage }
+      );
+      console.log(contract.address);
+      await contract.deployTransaction.wait();
 
-    fetch(`/api/venues/user/${user}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        contractAddress: contract.address,
-        ownerAddress: user,
-        description: venueObject.description,
-        name: venueObject.name,
-        priceInWei: venueObject.priceInWei,
-        coverage: venueObject.coverage,
-        unitsPerSlot: venueObject.unitsPerSlot,
-        startDay: venueObject.startDay,
-        startYear: venueObject.startYear,
-        location: venueObject.location,
-        daysRule: venueObject.daysRule,
-        startHour: venueObject.startHour,
-        endHour: venueObject.endHour,
-        startMinute: venueObject.startMinute,
-        endMinute: venueObject.endMinute,
-      }),
-    });
+      fetch(`/api/venues/user/${user}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          contractAddress: contract.address,
+          ownerAddress: user,
+          description: venueObject.description,
+          name: venueObject.name,
+          priceInWei: venueObject.priceInWei,
+          coverage: venueObject.coverage,
+          unitsPerSlot: venueObject.unitsPerSlot,
+          startDay: venueObject.startDay,
+          startYear: venueObject.startYear,
+          location: venueObject.location,
+          daysRule: venueObject.daysRule,
+          startHour: venueObject.startHour,
+          endHour: venueObject.endHour,
+          startMinute: venueObject.startMinute,
+          endMinute: venueObject.endMinute,
+        }),
+      });
+    } catch (err) {
+      alert("There was an error");
+    }
   };
 
   return (
-    <div className="bg-white">
+    <div className="bg-white flex flex-col items-center">
+      <h1 className="text-[2rem] font-bold text-gray-700">List your venue</h1>
       <form
         onSubmit={handleSubmit}
         className="max-w-xl mx-auto mt-8 bg-gray-200 rounded-lg overflow-hidden shadow-md"

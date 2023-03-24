@@ -88,7 +88,7 @@ const Listing: React.FC<Props> = (props) => {
         }),
       });
     } catch (err) {
-      console.log(err);
+      alert("There was an error");
     }
   };
 
@@ -102,13 +102,18 @@ const Listing: React.FC<Props> = (props) => {
     <div className="bg-gray-200 max-w-xl flex flex-col m-4 px-4 py-4 items-start rounded text-gray-700 font-bold text-left">
       <div className="flex flex-row justify-between w-full">
         <div>{props.details.name}</div>
-        <div>{props.details.priceInWei.toString() + ' wei'}</div>
+        <div>{props.details.priceInWei.toString() + " wei"}</div>
       </div>
       <div className="flex flex-row justify-between w-full">
         <div>{props.details.location}</div>
-        <div>{getTimeFormatted(props.details.startHour, props.details.startMinute)} - {getTimeFormatted(props.details.endHour, props.details.endMinute)}</div>
+        <div>
+          {getTimeFormatted(props.details.startHour, props.details.startMinute)}{" "}
+          - {getTimeFormatted(props.details.endHour, props.details.endMinute)}
+        </div>
       </div>
-      <div><span className="font-normal">{props.details.description}</span></div>
+      <div>
+        <span className="font-normal">{props.details.description}</span>
+      </div>
       <div className="px-6 py-4 text-center w-full">
         <label className="block font-bold text-gray-700 mb-2" htmlFor="name">
           Name your booking

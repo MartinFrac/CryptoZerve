@@ -28,7 +28,12 @@ const VenueBookings: NextPage = () => {
     return <VenueBooking key={item.id} details={item} />;
   });
 
-  return <div className="grid grid-cols-3 gap-4">{venueBookingsComponent}</div>;
+  return (
+    <div className="flex flex-col items-center">
+      <h1 className="text-[2rem] font-bold text-gray-700">Venue Bookings</h1>
+      <div className="grid grid-cols-3 gap-4">{venueBookingsComponent}</div>
+    </div>
+  );
 };
 
 export default VenueBookings;

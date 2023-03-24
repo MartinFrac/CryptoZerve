@@ -12,8 +12,8 @@ const Footer = () => {
         <div className="w-1/3 flex flex-col justify-between">
           <ul className="flex list-none gap-4">
             <li>Contact</li>
-            <li>LinkedIn</li>
-            <li>Github</li>
+            <a target="window" href="https://www.linkedin.com/in/marcin-frackiewicz1/"><li>LinkedIn</li></a>
+            <a target="window" href="https://github.com/MartinFrac"><li>GitHub</li></a>
           </ul>
           <p>copyright</p>
         </div>
