@@ -1,5 +1,5 @@
 import { db } from "../../../config/firebase";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, increment, setDoc } from "firebase/firestore";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { VenueData } from ".";
 
@@ -11,11 +11,24 @@ export default async function handler(
   if (id === undefined) return;
   console.log(`api/venues/${id}: executed`);
 
+  if (req.method === "PUT") {
+    try {
+      const venueRef = doc(db, "venues", id.toString());
+      await setDoc(
+        venueRef,
+        { coverage: increment(req.body.increment) },
+        { merge: true }
+      );
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
+  }
+
   try {
     const docSnap = await getDoc(doc(db, "venues", id.toString()));
     if (docSnap.exists()) {
-      console.log(docSnap.id)
-      res.status(200).json({
+      console.log(docSnap.id);
+      return res.status(200).json({
         id: docSnap.id,
         contractAddress: docSnap.data().contractAddress,
         ownerAddress: docSnap.data().ownerAddress,
@@ -37,5 +50,5 @@ export default async function handler(
   } catch (e) {
     console.error("Error adding document: ", e);
   }
-  res.status(200);
+  return res.status(204);
 }
