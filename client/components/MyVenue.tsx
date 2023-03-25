@@ -1,16 +1,35 @@
 import React, { useState } from "react";
 import { VenueData } from "../pages/api/venues";
 import Link from "next/link";
+import { useMMContext } from "../context/MetamaskContext";
+import VENUE_ABI from "../abi/VenueSlots.json";
+import { ethers } from "ethers";
 
 type Props = {
   details: VenueData;
 };
 
 const MyVenue: React.FC<Props> = (props) => {
+  const mmContext = useMMContext();
+  const user = mmContext.account;
+  const provider = mmContext.provider;
   const [topUp, setTopUp] = useState(0);
 
-  const handleTopUp = () => {
+  const handleTopUp = async () => {
+    if (user === null) {
+      alert("Your wallet is not connected");
+      return;
+    }
+    const signer = provider.getSigner();
+    const VenueContract = new ethers.Contract(
+      props.details.contractAddress,
+      VENUE_ABI,
+      provider
+    );
     try {
+      const VenueContractWithSigner = VenueContract.connect(signer);
+      const response = await VenueContractWithSigner.topUp({ value: topUp });
+      console.log(response);
       fetch(`/api/venues/${props.details.id}`, {
         method: "PUT",
         headers: {
@@ -20,6 +39,7 @@ const MyVenue: React.FC<Props> = (props) => {
           increment: topUp,
         }),
       });
+      alert("top up successful");
     } catch (err) {
       alert("There was an error");
     }
