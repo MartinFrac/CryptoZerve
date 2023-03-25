@@ -81,48 +81,50 @@ const VenueBooking: React.FC<Props> = (props) => {
 
   return (
     <div className="bg-gray-200 max-w-xl flex flex-col m-4 px-4 py-4 items-start rounded text-gray-700 font-bold text-left">
-      <div className="flex flex-row justify-between w-full">
+      <div className="flex flex-row justify-between w-full text-lg">
         <div>{props.details.name}</div>
         <div>{props.details.day}</div>
       </div>
-      <div>
-        Time start: {props.details.startHour.toString().padStart(2, "0")}:
-        {props.details.startMinute.toString().padEnd(2, "0")}
+      <div className="flex flex-row w-full justify-between text-sm underline py-2">
+        <div>
+          {props.details.startHour.toString().padStart(2, "0")}:
+          {props.details.startMinute.toString().padEnd(2, "0")}
+          {" - " + props.details.endHour.toString().padStart(2, "0")}:
+          {props.details.endMinute.toString().padEnd(2, "0")}
+        </div>
+        <div>Units: {props.details.units}</div>
       </div>
-      <div>
-        Time end: {props.details.endHour.toString().padStart(2, "0")}:
-        {props.details.endMinute.toString().padEnd(2, "0")}
+      <div className="bg-gray-500 flex flex-col px-4 py-4 rounded text-white">
+        <label className="block font-bold mb-2" htmlFor="pin">
+          PIN:
+        </label>
+        <input
+          className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          type="number"
+          id="pin"
+          value={pinInput}
+          onChange={(event) => setPinInput(parseInt(event.target.value))}
+        />
+        <label
+          className="block font-bold mb-2"
+          htmlFor="addressEnd"
+        >
+          Address End (2):
+        </label>
+        <input
+          className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          type="string"
+          id="addressEnd"
+          value={addressEndInput}
+          onChange={(event) => setAddressEndInput(event.target.value)}
+        />
+        <button
+          onClick={() => confirm()}
+          className="bg-white max-w-md px-2 py-2 mt-2 text-black"
+        >
+          Confirm
+        </button>
       </div>
-      <div>Units: {props.details.units}</div>
-      <label className="block font-bold text-gray-700 mb-2" htmlFor="pin">
-        PIN:
-      </label>
-      <input
-        className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        type="number"
-        id="pin"
-        value={pinInput}
-        onChange={(event) => setPinInput(parseInt(event.target.value))}
-      />
-      <label
-        className="block font-bold text-gray-700 mb-2"
-        htmlFor="addressEnd"
-      >
-        Address End (2):
-      </label>
-      <input
-        className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        type="string"
-        id="addressEnd"
-        value={addressEndInput}
-        onChange={(event) => setAddressEndInput(event.target.value)}
-      />
-      <button
-        onClick={() => confirm()}
-        className="bg-white max-w-md px-2 py-2 mt-2 text-black"
-      >
-        Confirm
-      </button>
     </div>
   );
 };

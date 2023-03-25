@@ -37,12 +37,9 @@ const Listings: NextPage = () => {
   });
 
   return (
-    <div className="text-center">
-      <div className="flex flex-row gap-[4rem]">
-        <div className="flex flex-col justify-start flex-1 min-w-[30rem]">
-          {listingsComponent}
-        </div>
-      </div>
+    <div className="flex flex-col items-center">
+      <h1 className="text-[2rem] font-bold text-gray-700">Listings</h1>
+      <div className="grid grid-cols-2 gap-4">{listingsComponent}</div>
     </div>
   );
 };

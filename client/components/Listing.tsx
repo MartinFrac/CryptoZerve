@@ -100,38 +100,40 @@ const Listing: React.FC<Props> = (props) => {
 
   return (
     <div className="bg-gray-200 max-w-xl flex flex-col m-4 px-4 py-4 items-start rounded text-gray-700 font-bold text-left">
-      <div className="flex flex-row justify-between w-full">
+      <div className="flex flex-row justify-between w-full text-lg">
         <div>{props.details.name}</div>
         <div>{props.details.priceInWei.toString() + " wei"}</div>
       </div>
-      <div className="flex flex-row justify-between w-full">
+      <div className="flex flex-row justify-between w-full text-sm underline py-2">
         <div>{props.details.location}</div>
         <div>
           {getTimeFormatted(props.details.startHour, props.details.startMinute)}{" "}
           - {getTimeFormatted(props.details.endHour, props.details.endMinute)}
         </div>
       </div>
-      <div>
+      <div className="py-2">
         <span className="font-normal">{props.details.description}</span>
       </div>
-      <div className="px-6 py-4 text-center w-full">
-        <label className="block font-bold text-gray-700 mb-2" htmlFor="name">
-          Name your booking
-        </label>
-        <input
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          type="text"
-          id="name"
-          value={nameInput}
-          onChange={(event) => setNameInput(event.target.value)}
-        />
+      <div className="w-full h-full flex flex-col justify-end">
+        <div className="px-6 py-4 text-center rounded w-full bg-gray-500 text-white">
+          <label className="block font-bold mb-2" htmlFor="name">
+            Name your booking
+          </label>
+          <input
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            type="text"
+            id="name"
+            value={nameInput}
+            onChange={(event) => setNameInput(event.target.value)}
+          />
+        </div>
+        <button
+          onClick={() => request()}
+          className="bg-white px-2 py-2 mt-2 text-black"
+        >
+          Book
+        </button>
       </div>
-      <button
-        onClick={() => request()}
-        className="bg-white max-w-md px-2 py-2 mt-2 text-black"
-      >
-        Book
-      </button>
     </div>
   );
 };

@@ -47,11 +47,11 @@ const MyVenue: React.FC<Props> = (props) => {
 
   return (
     <div className="bg-gray-200 max-w-xl flex flex-col m-4 px-4 py-4 items-start rounded text-gray-700 font-bold text-left">
-      <div className="flex flex-row justify-between w-full">
+      <div className="flex flex-row justify-between w-full text-lg">
         <div>{props.details.name}</div>
         <div>Price per slot: {props.details.priceInWei} wei</div>
       </div>
-      <div className="flex flex-row justify-between w-full">
+      <div className="flex flex-row justify-between w-full text-sm py-2 underline">
         <div>{props.details.location}</div>
         <div>Top up value: {props.details.coverage} wei</div>
       </div>
