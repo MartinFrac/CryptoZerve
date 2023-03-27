@@ -21,7 +21,7 @@ export default async function handler(
   try {
     const dayOfWeek = weekList[new Date(filters.day).getDay()];
     //filter on time
-    const startHourWhere = where("startHour", "<", filters.hourStart);
+    const startHourWhere = where("startHour", "<=", filters.hourStart);
     //filter on day
     const daysRuleWhere = where("daysRule", "array-contains", dayOfWeek);
     const daysRuleOrder = orderBy("startHour");
