@@ -54,7 +54,8 @@ describe("VenueVsBookingVsVenueSlots", () => {
     const txNewVenue = await svg.createVenue("name", "location", {
       from: accounts[0],
     });
-    const txNewVS = await VenueSlots.new(
+    //vs
+    const contractVS = await VenueSlots.new(
       "Wigra",
       "33.454, 43.4325",
       3,
@@ -65,9 +66,13 @@ describe("VenueVsBookingVsVenueSlots", () => {
       5000,
       { value: 20_000 }
     );
+    //Venue
+    const contractV = await Venue.new("venue", "location");
 
-    const gasEstimate = await web3.eth.getTransactionReceipt(txNewVS.transactionHash);
-    console.log("VS gas: ".padStart(20, " ") + gasEstimate.gasUsed);
+    const txV = await web3.eth.getTransactionReceipt(contractV.transactionHash);
+    const txVS = await web3.eth.getTransactionReceipt(contractVS.transactionHash);
+    console.log("VS gas: ".padStart(20, " ") + txVS.gasUsed);
+    console.log("Venue gas: ".padStart(20, " ") + txV.gasUsed);
     console.log("SVG gas: ".padStart(20, " ") + txNewVenue.receipt.gasUsed);
   });
 
