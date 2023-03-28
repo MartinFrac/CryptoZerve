@@ -16,11 +16,11 @@ describe("VenueVsBookingVsVenueSlots", () => {
       "33.454, 43.4325",
       3,
       2023,
-      0b110011,
-      0b111100001111,
+      0b111111111,
+      0b111111111,
       30,
       5000,
-      { value: 20_000 }
+      { value: 600_000 }
     );
     accounts = await web3.eth.getAccounts();
   });
@@ -77,23 +77,33 @@ describe("VenueVsBookingVsVenueSlots", () => {
   });
 
   it("Should output gas cost for creating an offer", async () => {
-    //venue
-    const price = 1000;
-    const txVenueGasSum = await sumVenueOffer(accounts[1], price);
-
-    //booking
-    const txVbgBooking = await vbg.createBooking("name", "", "", "location", {
-      value: price,
-    });
-
-    //venueslots
-    const txVSBooking = await venueSlots.book(1, 1, 1, 1, 1, { value: 5000 });
+    const price = 5000;
+    let VgasSum = 0;
+    let VSgasSum = 0;
+    let VBGgasSum = 0;
+    let day = 1;
+    for (let i = 0; i < 100; i++) {
+      if (i%20 == 0) {
+        day += 1;
+      }
+      //venue
+      const txVenueGasSum = await sumVenueOffer(accounts[1], price);
+      //booking
+      const txVbgBooking = await vbg.createBooking("name", "", "", "location", {
+        value: price,
+      });
+      //venueslots
+      const txVSBooking = await venueSlots.book(day, 1, 1, 1, 1, { value: price });
+      VgasSum += txVenueGasSum;
+      VSgasSum += txVSBooking.receipt.gasUsed;
+      VBGgasSum += txVbgBooking.receipt.gasUsed;
+    }
 
     console.log(
-      "VenueSlots gas: ".padStart(20, " ") + txVSBooking.receipt.gasUsed
+      "VenueSlots gas: ".padStart(20, " ") + VSgasSum
     );
-    console.log("Venue gas: ".padStart(20, " ") + txVenueGasSum);
-    console.log("VBG gas: ".padStart(20, " ") + txVbgBooking.receipt.gasUsed);
+    console.log("Venue gas: ".padStart(20, " ") + VgasSum);
+    console.log("VBG gas: ".padStart(20, " ") + VBGgasSum);
   });
 
   it("Should output gas for lifecycle of creating and booking an offer", async () => {
