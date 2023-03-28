@@ -1,13 +1,15 @@
 const VenueBookingGenerator = artifacts.require("VenueBookingGenerator");
+const SystemVenueGenerator = artifacts.require("SystemVenueGenerator");
 const Booking = artifacts.require("Booking");
 const Venue = artifacts.require("Venue");
 const VenueSlots = artifacts.require("VenueSlots");
 const { toBN } = web3.utils;
 
 describe("VenueVsBookingVsVenueSlots", () => {
-  let vbg, venue, venueSlots, accounts;
+  let svg, vbg, venue, venueSlots, accounts;
   beforeEach("Contract setup for testing", async () => {
     venue = await Venue.new("venue", "location");
+    svg = await SystemVenueGenerator.new();
     vbg = await VenueBookingGenerator.new("vbg", "location");
     venueSlots = await VenueSlots.new(
       "Wigra",
@@ -47,6 +49,28 @@ describe("VenueVsBookingVsVenueSlots", () => {
     assert(venueSlots !== undefined);
   });
 
+  it("Should output gas cost for creating a venue", async () => {
+    //venue
+    const txNewVenue = await svg.createVenue("name", "location", {
+      from: accounts[0],
+    });
+    const txNewVS = await VenueSlots.new(
+      "Wigra",
+      "33.454, 43.4325",
+      3,
+      2023,
+      0b110011,
+      0b111100001111,
+      30,
+      5000,
+      { value: 20_000 }
+    );
+
+    const gasEstimate = await web3.eth.getTransactionReceipt(txNewVS.transactionHash);
+    console.log("VS gas: ".padStart(20, " ") + gasEstimate.gasUsed);
+    console.log("SVG gas: ".padStart(20, " ") + txNewVenue.receipt.gasUsed);
+  });
+
   it("Should output gas cost for creating an offer", async () => {
     //venue
     const price = 1000;
@@ -60,7 +84,9 @@ describe("VenueVsBookingVsVenueSlots", () => {
     //venueslots
     const txVSBooking = await venueSlots.book(1, 1, 1, 1, 1, { value: 5000 });
 
-    console.log("VenueSlots gas: ".padStart(20, " ") + txVSBooking.receipt.gasUsed);
+    console.log(
+      "VenueSlots gas: ".padStart(20, " ") + txVSBooking.receipt.gasUsed
+    );
     console.log("Venue gas: ".padStart(20, " ") + txVenueGasSum);
     console.log("VBG gas: ".padStart(20, " ") + txVbgBooking.receipt.gasUsed);
   });
@@ -101,10 +127,18 @@ describe("VenueVsBookingVsVenueSlots", () => {
     const day = 1;
     const pin = 1;
     const addressEnd = 0xa1;
-    const txVSBooking = await venueSlots.book(day, 1, 1, 1, pin, { value: 5000 });
-    const txVSConfirm = await venueSlots.confirmAttendance(day, addressEnd, pin + 1, {from: accounts[0]});
+    const txVSBooking = await venueSlots.book(day, 1, 1, 1, pin, {
+      value: 5000,
+    });
+    const txVSConfirm = await venueSlots.confirmAttendance(
+      day,
+      addressEnd,
+      pin + 1,
+      { from: accounts[0] }
+    );
 
-    const txVSGasSum = txVSBooking.receipt.gasUsed + txVSConfirm.receipt.gasUsed;
+    const txVSGasSum =
+      txVSBooking.receipt.gasUsed + txVSConfirm.receipt.gasUsed;
     const txVenueGasSum = txVenueGasOffer + txVenueGasBook.receipt.gasUsed;
     const txbookingGasSum =
       txCreateBooking.receipt.gasUsed +
