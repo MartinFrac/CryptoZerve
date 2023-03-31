@@ -10,6 +10,7 @@ const VenueBookings: NextPage = () => {
   const user = mmContext.account;
   const [venueBookingsList, setVenueBookingsList] = useState<BookingData[]>([]);
   const router = useRouter();
+  const [isConfirmed, setIsConfirmed] = useState<boolean>(false);
   const { venueID } = router.query;
 
   useEffect(() => {
@@ -24,13 +25,16 @@ const VenueBookings: NextPage = () => {
       });
   }, []);
 
-  const venueBookingsComponent = venueBookingsList.map((item) => {
+  const venueBookingsComponent = venueBookingsList.filter(b => b.isConfirmed === isConfirmed).map((item) => {
     return <VenueBooking key={item.id} details={item} />;
   });
 
   return (
     <div className="flex flex-col items-center">
-      <h1 className="text-[2rem] font-bold text-gray-700">Venue Bookings</h1>
+      <div className="flex flex-row justify-center items-center gap-4">
+        <h1 className="text-[2rem] font-bold text-gray-700">Venue Bookings</h1>
+        <div onClick={() => setIsConfirmed(prev => !prev)} className="bg-black text-white px-2 py-2 rounded-sm cursor-pointer">{isConfirmed ? 'Confirmed' : 'Not Confirmed'}</div>
+      </div>
       <div className="grid grid-cols-3 gap-4">{venueBookingsComponent}</div>
     </div>
   );
