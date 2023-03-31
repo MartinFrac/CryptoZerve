@@ -73,13 +73,13 @@ const Activity = () => {
         <div className="px-2 flex flex-col gap-4 items-start">
           <label>
             Start time:
-            <Time setTime={setStartTime} />
+            <Time startHour={filters.hourStart} startMinute={filters.minuteStart} setTime={setStartTime} />
           </label>
           <label>
             End time:
-            <Time setTime={setEndTime} />
+            <Time startHour={filters.hourEnd} startMinute={filters.minuteEnd} setTime={setEndTime} />
           </label>
-          <Units onSetUnits={setUnits} />
+          <Units startUnits={filters.units} onSetUnits={setUnits} />
           <Link
             href={{
               pathname: "/listings",

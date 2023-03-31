@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
 
 type Props = {
+  startUnits: number,
   onSetUnits: (units: number) => void;
 }
 
-const Units: React.FC<Props> = ({ onSetUnits }) => {
-  const [units, setUnits] = useState(0);
+const Units: React.FC<Props> = ({ startUnits, onSetUnits }) => {
+  const [units, setUnits] = useState(startUnits);
 
   const handleHoursChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const value = parseInt(event.target.value, 10);
