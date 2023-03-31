@@ -9,7 +9,7 @@ import {
 import type { NextApiRequest, NextApiResponse } from "next";
 import { VenueData } from "..";
 import { Filters } from "../../../../context/FiltersContext";
-import { weekList } from "../../../../utils/dates";
+import { getSlotNumber, weekList } from "../../../../utils/dates";
 
 export default async function handler(
   req: NextApiRequest,
@@ -37,6 +37,12 @@ export default async function handler(
       //check if name exists && if name is matched
       if (filters.name !== "" && doc.data().name !== filters.name) return;
       if (doc.data().endHour < filters.hourEnd) return;
+      //calculate cost
+      const startSlot = getSlotNumber(filters.hourStart, filters.minuteStart);
+      const endSlot = getSlotNumber(filters.hourEnd, filters.minuteEnd);
+      const nOSlots = endSlot - startSlot;
+      const cost = doc.data().priceInWei * filters.units * nOSlots;
+      if (cost > doc.data().coverage) return;
       listings.push({
         id: doc.id,
         contractAddress: doc.data().contractAddress,

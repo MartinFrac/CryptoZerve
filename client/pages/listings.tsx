@@ -22,7 +22,7 @@ const Listings: NextPage = () => {
         day: filters.day,
         hourStart: filters.hourStart,
         hourEnd: filters.hourEnd,
-        minuteEnd: filters.minuteStart,
+        minuteEnd: filters.minuteEnd,
         minuteStart: filters.minuteStart,
       }),
     })

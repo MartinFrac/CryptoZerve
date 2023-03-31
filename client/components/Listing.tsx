@@ -87,8 +87,8 @@ const Listing: React.FC<Props> = (props) => {
           units: filters.units,
         }),
       });
-    } catch (err) {
-      alert("There was an error");
+    } catch (err: any) {
+      alert(err.data.message);
     }
   };
 
