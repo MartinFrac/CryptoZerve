@@ -32,6 +32,9 @@ export const MetamaskContextProvider: React.FC<Props> = ({ children }) => {
     const accounts = await providerLocal.send("eth_requestAccounts", []);
     if (accounts.length == 0) return;
     setmmAccount(accounts[0]);
+    window.ethereum.on('accountsChanged', (accounts: any) => {
+      setmmAccount(accounts[0])
+    })
   };
 
   return (
