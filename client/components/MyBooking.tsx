@@ -26,7 +26,6 @@ const MyBooking: React.FC<Props> = (props) => {
         <div>Pin: {props.details.pin}</div>
         <div>Units: {props.details.units}</div>
       </div>
-      <div className="py-2">Is Confirmed: {props.details.isConfirmed ? "Yes" : "No"}</div>
     </div>
   );
 };
