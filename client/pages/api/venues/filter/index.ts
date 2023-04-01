@@ -36,7 +36,12 @@ export default async function handler(
     querySnapshotStart.forEach((doc) => {
       //check if name exists && if name is matched
       if (filters.name !== "" && doc.data().name !== filters.name) return;
+      //check endhour
       if (doc.data().endHour < filters.hourEnd) return;
+      //check end minutes
+      if (doc.data().endHour === filters.hourEnd && doc.data().endMinute < filters.minuteEnd) return;
+      //check start minutes
+      if (doc.data().startHour === filters.hourStart && doc.data().startMinute > filters.minuteStart) return;
       //calculate cost
       const startSlot = getSlotNumber(filters.hourStart, filters.minuteStart);
       const endSlot = getSlotNumber(filters.hourEnd, filters.minuteEnd);
