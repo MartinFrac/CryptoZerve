@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import { useFiltersContext } from "../../context/FiltersContext";
 
 type Props = {
-  startHour: number,
-  startMinute: number,
+  startHour?: number,
+  startMinute?: number,
   setTime: (hour: number, minute: number) => void;
 }
 
-const Time: React.FC<Props> = ({ startHour, startMinute, setTime }) => {
+const Time: React.FC<Props> = ({ startHour = 0, startMinute = 0, setTime }) => {
   const [hours, setHours] = useState<number>(startHour);
   const [minutes, setMinutes] = useState<number>(startMinute);
 
