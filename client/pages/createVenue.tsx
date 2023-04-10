@@ -88,6 +88,7 @@ const createVenue: NextPage = () => {
         { value: venueObject.coverage }
       );
       console.log(contract.address);
+      alert(`${venueObject.name} listed`);
       await contract.deployTransaction.wait();
 
       fetch(`/api/venues/user/${user}`, {
@@ -113,8 +114,8 @@ const createVenue: NextPage = () => {
           endMinute: venueObject.endMinute,
         }),
       });
-    } catch (err) {
-      alert("There was an error");
+    } catch (err: any) {
+      alert(err.data.message);
     }
   };
 

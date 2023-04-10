@@ -9,6 +9,7 @@ const myBookings: NextPage = () => {
   const user = mmContext.account;
   const [myBookingsList, setMyBookingsList] = useState<BookingData[]>([]);
   const [isConfirmed, setIsConfirmed] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     if (user === null) {
@@ -19,6 +20,7 @@ const myBookings: NextPage = () => {
       .then((res) => res.json())
       .then((data) => {
         setMyBookingsList(data);
+        setLoading(false);
       });
   }, []);
 
@@ -27,6 +29,14 @@ const myBookings: NextPage = () => {
     .map((item) => {
       return <MyBooking key={item.id} details={item} />;
     });
+
+  if (loading) {
+    return <div className="flex items-center justify-center">Loading...</div>;
+  }
+
+  if (myBookingsList.length === 0) {
+    return <div className="flex items-center justify-center">No Bookings</div>;
+  }
 
   return (
     <div className="flex flex-col items-center">

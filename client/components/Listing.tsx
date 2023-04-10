@@ -65,6 +65,7 @@ const Listing: React.FC<Props> = (props) => {
           from: user,
         }
       );
+      alert("booking made");
       console.log(response);
       fetch(`/api/bookings/user/${user}`, {
         method: "POST",

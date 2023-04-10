@@ -11,6 +11,7 @@ const VenueBookings: NextPage = () => {
   const [venueBookingsList, setVenueBookingsList] = useState<BookingData[]>([]);
   const router = useRouter();
   const [isConfirmed, setIsConfirmed] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const { venueID } = router.query;
 
   useEffect(() => {
@@ -22,12 +23,27 @@ const VenueBookings: NextPage = () => {
       .then((res) => res.json())
       .then((data) => {
         setVenueBookingsList(data);
+        setLoading(false);
       });
   }, []);
 
   const venueBookingsComponent = venueBookingsList.filter(b => b.isConfirmed === isConfirmed).map((item) => {
     return <VenueBooking key={item.id} details={item} />;
   });
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center">
+        Loading...
+      </div>
+    )
+  }
+
+  if (venueBookingsList.length === 0) {
+    return (
+      <div className="flex items-center justify-center">No Bookings</div>
+    )
+  }
 
   return (
     <div className="flex flex-col items-center">

@@ -64,6 +64,7 @@ const VenueBooking: React.FC<Props> = (props) => {
         addressEnd,
         pin
       );
+      alert("Attendance confirmed");
       console.log(response);
       fetch(`/api/bookings/${props.details.id}`, {
         method: "PUT",
@@ -74,8 +75,8 @@ const VenueBooking: React.FC<Props> = (props) => {
           isConfirmed: true,
         }),
       });
-    } catch (err) {
-      alert("There was an error");
+    } catch (err: any) {
+      alert(err.data.message);
     }
   };
 
@@ -105,10 +106,7 @@ const VenueBooking: React.FC<Props> = (props) => {
           value={pinInput}
           onChange={(event) => setPinInput(parseInt(event.target.value))}
         />
-        <label
-          className="block font-bold mb-2"
-          htmlFor="addressEnd"
-        >
+        <label className="block font-bold mb-2" htmlFor="addressEnd">
           Address End (2):
         </label>
         <input
