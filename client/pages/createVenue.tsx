@@ -115,7 +115,8 @@ const createVenue: NextPage = () => {
         }),
       });
     } catch (err: any) {
-      alert(err.data.message);
+      alert("enter all the values");
+      console.log(err);
     }
   };
 
