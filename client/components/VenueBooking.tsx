@@ -76,7 +76,8 @@ const VenueBooking: React.FC<Props> = (props) => {
         }),
       });
     } catch (err: any) {
-      alert(err.data.message);
+      alert("wrong reference");
+      console.log(err);
     }
   };
 
