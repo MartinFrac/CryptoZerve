@@ -1,5 +1,5 @@
 import { db } from "../../../../config/firebase";
-import { FieldValue, addDoc, collection, doc, getDocs, setDoc, increment } from "firebase/firestore";
+import { FieldValue, addDoc, collection, doc, getDocs, setDoc, increment, query, where } from "firebase/firestore";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { BookingData } from "../.";
 
@@ -7,8 +7,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<BookingData[]>
 ) {
-  const { query } = req;
-  const { id } = query;
+  const { id } = req.query;
   if (id === undefined) return;
   console.log(`api/bookings/${id}: executed`);
 
@@ -27,7 +26,9 @@ export default async function handler(
 
   let bookings: BookingData[] = [];
   try {
-    const querySnapshot = await getDocs(collection(db, "bookings"));
+    const bookingsRef = collection(db, "bookings");
+    const q = query(bookingsRef, where("userAddress", "==", id.toString()));
+    const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
       console.log(`${doc.id} => ${JSON.stringify(doc.data())}`);
       bookings.push({
